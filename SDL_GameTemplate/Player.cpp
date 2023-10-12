@@ -19,10 +19,19 @@ void Player::init()
    destRect.w = destRect.h = 64;
 }
 
+void Player::moveLeft()
+{
+
+}
+
+void Player::moveRight() 
+{
+
+}
+
 void Player::update()
 {
-   destRect.x++;
-   destRect.y++;;
+	std::cout << "Updating Player";
 }
 
 

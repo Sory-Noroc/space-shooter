@@ -47,7 +47,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	map = new Map(renderer);
-   player = new Player ("assets/Walk_9.png", renderer);
+   player = new Player ("assets/spaceship.png", renderer);
    player->init();
 }
 
@@ -68,6 +68,25 @@ void Game::handleEvents()
 void Game::update() const
 {
 	player->update();
+	SDL_Event event;
+		/* Poll for events. SDL_PollEvent() returns 0 when there are no  */
+		/* more events on the event queue, our while loop will exit when */
+		/* that occurs.                                                  */
+		while (SDL_PollEvent(&event)) {
+			/* We are only worried about SDL_KEYDOWN and SDL_KEYUP events */
+			switch (event.type) {
+			case SDLK_LEFT:
+				player.moveLeft();
+				break;
+
+			case SDLK_RIGHT:
+				player.moveRight();
+				break;
+
+			default:
+				break;
+			}
+		}
 }
 
 void Game::render() const
