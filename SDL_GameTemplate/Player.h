@@ -20,7 +20,7 @@ public:
 
 	void draw() override;
 
-	void moveLeft();
+	void moveLeft(int step);
 
-	void moveRight();
+	void moveRight(int step);
 };

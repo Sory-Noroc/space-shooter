@@ -7,6 +7,8 @@ Map* map;
 
 Player *player;
 
+const int STEP = 1;
+
 Game::Game(): isRunning(false), window(nullptr), renderer(nullptr)
 {
 }
@@ -54,9 +56,48 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 void Game::handleEvents()
 {
 	SDL_Event event;
+	int x_velocity = 0; // Flag to be set depending on key presses and updated after the loop
 	SDL_PollEvent(&event);
+	/* Poll for events. SDL_PollEvent() returns 0 when there are no  */
+	/* more events on the event queue, our while loop will exit when */
+	/* that occurs.
+	*/
 	switch (event.type)
 	{
+	case SDL_KEYDOWN:
+
+		switch (event.key.keysym.sym)
+		{
+		case SDLK_LEFT:
+			x_velocity = -STEP;
+			break;
+
+		case SDLK_RIGHT:
+			x_velocity = STEP;
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case SDL_KEYUP:
+		switch (event.key.keysym.sym) {
+		case SDLK_LEFT:
+			if (x_velocity < 0) {
+				x_velocity = 0;
+			}
+			break;
+		case SDLK_RIGHT:
+			if (x_velocity > 0) {
+				x_velocity = 0;
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+
 	case SDL_QUIT: {
 		isRunning = false;
 		break;
@@ -64,29 +105,17 @@ void Game::handleEvents()
 	default:
 		break;
 	}
+
+	if (x_velocity < 0) {
+		player->moveLeft(STEP);
+	}
+	if (x_velocity > 0) {
+		player->moveRight(STEP);
+	}
 }
 void Game::update() const
 {
 	player->update();
-	SDL_Event event;
-		/* Poll for events. SDL_PollEvent() returns 0 when there are no  */
-		/* more events on the event queue, our while loop will exit when */
-		/* that occurs.                                                  */
-		while (SDL_PollEvent(&event)) {
-			/* We are only worried about SDL_KEYDOWN and SDL_KEYUP events */
-			switch (event.type) {
-			case SDLK_LEFT:
-				player->moveLeft();
-				break;
-
-			case SDLK_RIGHT:
-				player->moveRight();
-				break;
-
-			default:
-				break;
-			}
-		}
 }
 
 void Game::render() const

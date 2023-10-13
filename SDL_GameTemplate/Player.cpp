@@ -19,18 +19,14 @@ void Player::init()
    destRect.w = destRect.h = 64;
 }
 
-void Player::moveLeft()
+void Player::moveLeft(int step)
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event) != 0)
-	{
-
-	}
+	destRect.x -= step;
 }
 
-void Player::moveRight() 
+void Player::moveRight(int step)
 {
-
+	destRect.x += step;
 }
 
 void Player::update()
