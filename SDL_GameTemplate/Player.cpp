@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Player.h"
 #include "TextureManager.h"
 
@@ -11,7 +12,6 @@ void Player::setTex(const char* path)
    texture = TextureManager::LoadTexture(path, renderer);
 }
 
-
 void Player::init()
 {
    srcRect.x = srcRect.y = 0;
@@ -21,7 +21,11 @@ void Player::init()
 
 void Player::moveLeft()
 {
+	SDL_Event event;
+	while (SDL_PollEvent(&event) != 0)
+	{
 
+	}
 }
 
 void Player::moveRight() 

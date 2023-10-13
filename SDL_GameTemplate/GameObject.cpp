@@ -1,6 +1,6 @@
 #include "GameObject.h"
 #include "TextureManager.h"
-#include <SDL.h>
+#include "SDL.h"
 
 GameObject::GameObject(const char* textureSheet, SDL_Renderer* renderer, int x, int y)
 {

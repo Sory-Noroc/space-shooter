@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "SDL.h"
+#include <SDL.h>
 
 class Player : public Component
 {
@@ -19,4 +19,8 @@ public:
 	void update() override;
 
 	void draw() override;
+
+	void moveLeft();
+
+	void moveRight();
 };

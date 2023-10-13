@@ -76,11 +76,11 @@ void Game::update() const
 			/* We are only worried about SDL_KEYDOWN and SDL_KEYUP events */
 			switch (event.type) {
 			case SDLK_LEFT:
-				player.moveLeft();
+				player->moveLeft();
 				break;
 
 			case SDLK_RIGHT:
-				player.moveRight();
+				player->moveRight();
 				break;
 
 			default:
