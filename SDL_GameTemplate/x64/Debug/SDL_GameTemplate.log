@@ -1,2 +1,8 @@
 ﻿  Game.cpp
+  GameObject.cpp
+  Main.cpp
+  Map.cpp
+  Player.cpp
+  TextureManager.cpp
+  Generating Code...
   SDL_GameTemplate.vcxproj -> C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\x64\Debug\SDL_GameTemplate.exe
