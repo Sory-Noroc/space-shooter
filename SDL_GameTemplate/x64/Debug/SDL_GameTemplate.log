@@ -1,14 +1,2 @@
 ﻿  Game.cpp
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Game.cpp(79,13): error C2039: 'moveLeft': is not a member of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.h(5,7): message : see declaration of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Game.cpp(83,13): error C2039: 'moveRight': is not a member of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.h(5,7): message : see declaration of 'Player'
-  Player.cpp
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.cpp(22,14): error C2039: 'moveLeft': is not a member of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.h(5,7): message : see declaration of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.cpp(27,14): error C2039: 'moveRight': is not a member of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.h(5,7): message : see declaration of 'Player'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.cpp(34,7): error C2039: 'cout': is not a member of 'std'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\ucrt\stddef.h(23,15): message : see declaration of 'std'
-C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\SDL_GameTemplate\Player.cpp(34,12): error C2065: 'cout': undeclared identifier
-  Generating Code...
+  SDL_GameTemplate.vcxproj -> C:\Users\sorin\OneDrive\Desktop\Programming\C++\space-shooter\x64\Debug\SDL_GameTemplate.exe
