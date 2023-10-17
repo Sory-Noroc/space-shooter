@@ -1,9 +1,9 @@
 #include "Game.h"
 #include <iostream>
-#include "Map.h"
+#include "Background.h"
 #include "Player.h"
 
-Map* map;
+Background* background;
 
 Player *player;
 
@@ -48,7 +48,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
-	map = new Map(renderer);
+	background = new Background(renderer);
    player = new Player ("assets/spaceship.png", renderer);
    player->init();
 }
@@ -122,7 +122,7 @@ void Game::render() const
 {
 	SDL_RenderClear(renderer);
 	// this is where we would add stuff to render
-	map->DrawMap();
+	background->DrawBackground();
 
 	player->draw();
 	SDL_RenderPresent(renderer);
