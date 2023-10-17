@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Game.h"
 #include "Spaceship.h"
 #include "TextureManager.h"
 
@@ -23,12 +24,18 @@ void Spaceship::init()
 
 void Spaceship::moveLeft(int step)
 {
-	destRect.x -= step;
+	if (destRect.x > 0)
+	{
+		destRect.x -= step;
+	}
 }
 
 void Spaceship::moveRight(int step)
 {
-	destRect.x += step;
+	if (destRect.x < SCREEN_WIDTH - destRect.w)
+	{
+		destRect.x += step;
+	}
 }
 
 void Spaceship::update()

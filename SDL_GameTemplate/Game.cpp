@@ -1,5 +1,5 @@
-#include "Game.h"
 #include <iostream>
+#include "Game.h"
 #include "Background.h"
 #include "Spaceship.h"
 

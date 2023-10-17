@@ -2,13 +2,9 @@
 #include "Game.h"
 #include <SDL.h>
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 640;
-
 int main(int argc, char* args[])
 {
-	const int fps = 60;
+	const int fps = 120;
 	// max time between frames
 	const int frameDelay = 1000 / fps;
 	Game *game = new Game();
