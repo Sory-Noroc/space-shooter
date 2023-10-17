@@ -1,0 +1,16 @@
+<mxfile host="app.diagrams.net" modified="2023-10-17T10:36:08.076Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="JWok4VyupkcW-3LTsgK1" version="22.0.4" type="github">
+  <diagram name="Pagina-1" id="7HEJ_00uVLx2teGqQabP">
+    <mxGraphModel dx="1290" dy="534" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="nNqj2IortEndfVr5p308-1" value="Component&lt;br&gt;public:&lt;br&gt;- init()&lt;br&gt;- update()&lt;br&gt;- draw()" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="20" width="120" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="rKRRiK7rs89wT9z3kizz-1" value="Game&lt;br&gt;&lt;div&gt;- Creates the window, map and player&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="20" width="120" height="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
