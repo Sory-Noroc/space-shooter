@@ -1,13 +1,13 @@
 #include "Game.h"
 #include <iostream>
 #include "Background.h"
-#include "Player.h"
+#include "Spaceship.h"
 
 Background* background;
 
-Player *player;
+Spaceship *spaceship;
 
-const int STEP = 1;
+const int STEP = 10;
 
 Game::Game(): isRunning(false), window(nullptr), renderer(nullptr)
 {
@@ -15,7 +15,7 @@ Game::Game(): isRunning(false), window(nullptr), renderer(nullptr)
 
 Game::~Game()
 {
-   delete player;
+   delete spaceship;
 }
 
 
@@ -49,8 +49,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
-   player = new Player ("assets/spaceship.png", renderer);
-   player->init();
+	spaceship = new Spaceship("assets/spaceship.png", renderer);
+	spaceship->init();
 }
 
 void Game::handleEvents()
@@ -107,15 +107,15 @@ void Game::handleEvents()
 	}
 
 	if (x_velocity < 0) {
-		player->moveLeft(STEP);
+		spaceship->moveLeft(STEP);
 	}
 	if (x_velocity > 0) {
-		player->moveRight(STEP);
+		spaceship->moveRight(STEP);
 	}
 }
 void Game::update() const
 {
-	player->update();
+	spaceship->update();
 }
 
 void Game::render() const
@@ -124,7 +124,7 @@ void Game::render() const
 	// this is where we would add stuff to render
 	background->DrawBackground();
 
-	player->draw();
+	spaceship->draw();
 	SDL_RenderPresent(renderer);
 }
 
