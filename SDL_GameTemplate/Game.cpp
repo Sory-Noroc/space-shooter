@@ -7,7 +7,7 @@ Background* background;
 
 Spaceship *spaceship;
 
-const int STEP = 10;
+const int STEP = 5;
 
 Game::Game(): isRunning(false), window(nullptr), renderer(nullptr)
 {
@@ -62,59 +62,62 @@ void Game::handleEvents()
 	/* more events on the event queue, our while loop will exit when */
 	/* that occurs.
 	*/
-	switch (event.type)
-	{
-	case SDL_KEYDOWN:
-
-		switch (event.key.keysym.sym)
+		switch (event.type)
 		{
-		case SDLK_LEFT:
-			x_velocity = -STEP;
+		case SDL_KEYDOWN:
+
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_LEFT:
+				if (event.key.repeat == 0) {
+					left = 1;
+				}
+				break;
+
+			case SDLK_RIGHT:
+				if (event.key.repeat == 0) {
+					right = 1;
+				}
+				break;
+
+			default:
+				break;
+			}
 			break;
 
-		case SDLK_RIGHT:
-			x_velocity = STEP;
+		case SDL_KEYUP:
+			switch (event.key.keysym.sym) {
+			case SDLK_LEFT:
+				if (event.key.repeat == 0) {
+					left = 0;
+				}
+				break;
+			case SDLK_RIGHT:
+				if (event.key.repeat == 0) {
+					right = 0;
+				}
+				break;
+			default:
+				break;
+			}
 			break;
 
+		case SDL_QUIT: {
+			isRunning = false;
+			break;
+		}
 		default:
 			break;
 		}
-		break;
-
-	case SDL_KEYUP:
-		switch (event.key.keysym.sym) {
-		case SDLK_LEFT:
-			if (x_velocity < 0) {
-				x_velocity = 0;
-			}
-			break;
-		case SDLK_RIGHT:
-			if (x_velocity > 0) {
-				x_velocity = 0;
-			}
-			break;
-		default:
-			break;
-		}
-		break;
-
-	case SDL_QUIT: {
-		isRunning = false;
-		break;
-	}
-	default:
-		break;
-	}
-
-	if (x_velocity < 0) {
-		spaceship->moveLeft(STEP);
-	}
-	if (x_velocity > 0) {
-		spaceship->moveRight(STEP);
-	}
 }
 void Game::update() const
 {
+	if (left == 1) {
+		spaceship->moveLeft(STEP);
+	}
+	else if (right == 1) {
+		spaceship->moveRight(STEP);
+	}
 	spaceship->update();
 }
 

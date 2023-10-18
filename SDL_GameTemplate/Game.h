@@ -10,6 +10,7 @@ class Game
 public:
 	Game();
 	~Game();
+	int left, right;
 
 	void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
