@@ -8,8 +8,9 @@ int main(int argc, char* args[])
 	// max time between frames
 	const int frameDelay = 1000 / fps;
 	Game *game = new Game();
+	bool fullscreen = false;
 
-	game->init("Space Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
+	game->init("Space Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen);
 
 	while (game->running())
 	{
