@@ -2,10 +2,13 @@
 #include "Game.h"
 #include "Background.h"
 #include "Spaceship.h"
+#include "ECS.h"
+#include "Components.h"
 
 Background* background;
-
 Spaceship *spaceship;
+Manager manager;
+auto& newPlayer(manager.addEntity());
 
 const int STEP = 5;
 
@@ -17,7 +20,6 @@ Game::~Game()
 {
    delete spaceship;
 }
-
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -48,68 +50,80 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
+	lastUpdateTime = 0;
+	currentFrame = 0;
 	background = new Background(renderer);
-	spaceship = new Spaceship("assets/spaceship.png", renderer);
+	spaceship = new Spaceship("assets/ship.png", renderer);
 	spaceship->init();
+
+	newPlayer.addComponent<PositionComponent>();
 }
 
 void Game::handleEvents()
 {
 	SDL_Event event;
 	int x_velocity = 0; // Flag to be set depending on key presses and updated after the loop
+
+	int currentTime = SDL_GetTicks(), animationSpeed = 20, frameCount = 10;
+	if (currentTime - lastUpdateTime >= animationSpeed) {
+		currentFrame = (currentFrame + 1) % frameCount;
+		lastUpdateTime = currentTime;
+	}
+
 	SDL_PollEvent(&event);
 	/* Poll for events. SDL_PollEvent() returns 0 when there are no  */
 	/* more events on the event queue, our while loop will exit when */
 	/* that occurs.
 	*/
-		switch (event.type)
+	switch (event.type)
+	{
+	case SDL_KEYDOWN:
+
+		switch (event.key.keysym.sym)
 		{
-		case SDL_KEYDOWN:
-
-			switch (event.key.keysym.sym)
-			{
-			case SDLK_LEFT:
-				if (event.key.repeat == 0) {
-					left = 1;
-				}
-				break;
-
-			case SDLK_RIGHT:
-				if (event.key.repeat == 0) {
-					right = 1;
-				}
-				break;
-
-			default:
-				break;
+		case SDLK_LEFT:
+			if (event.key.repeat == 0) {
+				left = 1;
 			}
 			break;
 
-		case SDL_KEYUP:
-			switch (event.key.keysym.sym) {
-			case SDLK_LEFT:
-				if (event.key.repeat == 0) {
-					left = 0;
-				}
-				break;
-			case SDLK_RIGHT:
-				if (event.key.repeat == 0) {
-					right = 0;
-				}
-				break;
-			default:
-				break;
+		case SDLK_RIGHT:
+			if (event.key.repeat == 0) {
+				right = 1;
 			}
 			break;
 
-		case SDL_QUIT: {
-			isRunning = false;
-			break;
-		}
 		default:
 			break;
 		}
+		break;
+
+	case SDL_KEYUP:
+		switch (event.key.keysym.sym) {
+		case SDLK_LEFT:
+			if (event.key.repeat == 0) {
+				left = 0;
+			}
+			break;
+		case SDLK_RIGHT:
+			if (event.key.repeat == 0) {
+				right = 0;
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+
+	case SDL_QUIT: {
+		isRunning = false;
+		break;
+	}
+	default:
+		break;
+	}
 }
+
 void Game::update() const
 {
 	if (left == 1) {
@@ -119,6 +133,7 @@ void Game::update() const
 		spaceship->moveRight(STEP);
 	}
 	spaceship->update();
+	manager.update();
 }
 
 void Game::render() const
