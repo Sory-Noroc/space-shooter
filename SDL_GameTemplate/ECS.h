@@ -1,6 +1,4 @@
 #pragma once
-#include "Component.h"
-
 #include <bitset>
 #include <array>
 #include <iostream>
@@ -8,6 +6,9 @@
 #include <vector>
 #include <algorithm>
 
+
+class Component;
+class Entity;
 
 using ComponentID = std::size_t;
 
@@ -17,7 +18,7 @@ inline ComponentID getComponentTypeID() {
 }
 
 template <typename T> inline ComponentID getComponentTypeID() noexcept {
-	static ComponentID typeID = getComponentID();
+	static ComponentID typeID = getComponentTypeID();
 	return typeID;
 }
 
@@ -26,6 +27,15 @@ constexpr std::size_t maxComponents = 32;
 using ComponentBitSet = std::bitset<maxComponents>;
 using ComponentArray = std::array<Component *, maxComponents>;
 
+class Component
+{
+public:
+	Entity* entity;
+	virtual ~Component() = default;
+	virtual void init() = 0;
+	virtual void update() = 0;
+	virtual void draw() = 0;
+};
 
 class Entity {
 public:
@@ -45,12 +55,12 @@ public:
 	void destroy() { active = false; }
 
 	template <typename T> bool hasComponent() const {
-		return componentBitSet[getComponentID<T>];
+		return componentBitSet[getComponentTypeID<T>];
 	}
 
 	template <typename T, typename... TArgs>
 	T& addComponent(TArgs&&... mArgs) {
-		T* c(new T(std::forward<Targs>(mArgs)...));
+		T* c(new T(std::forward<TArgs>(mArgs)...));
 		c->entity = this;
 		std::unique_ptr<Component> uPtr{ c };
 		components.emplace_back(std::move(uPtr));
