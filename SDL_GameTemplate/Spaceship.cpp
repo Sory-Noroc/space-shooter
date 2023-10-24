@@ -3,23 +3,23 @@
 #include "Spaceship.h"
 #include "TextureManager.h"
 
-Spaceship::Spaceship(const char* path, SDL_Renderer* renderer): renderer(renderer)
+Spaceship::Spaceship(const char* path, SDL_Renderer* renderer) : renderer(renderer)
 {
-   setTex(path);
+	setTex(path);
 }
 
 void Spaceship::setTex(const char* path)
 {
-   texture = TextureManager::LoadTexture(path, renderer);
+	texture = TextureManager::LoadTexture(path, renderer);
 }
 
 void Spaceship::init()
 {
-   srcRect.x = srcRect.y = 0;
-   destRect.x = 350;
-   destRect.y = 500;
-   srcRect.w = srcRect.h = 50;
-   destRect.w = destRect.h = 80;
+	srcRect.x = srcRect.y = 0;
+	destRect.x = 350;
+	destRect.y = 500;
+	srcRect.w = srcRect.h = 50;
+	destRect.w = destRect.h = 80;
 }
 
 void Spaceship::moveLeft(int step)
@@ -46,5 +46,6 @@ void Spaceship::update()
 
 void Spaceship::draw()
 {
-   TextureManager::Draw(texture, srcRect, destRect, renderer);
+	TextureManager::Draw(texture, srcRect, destRect, renderer);
 }
+

@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "Components.h"
 #include <SDL.h>
 
 class Spaceship : public Component
