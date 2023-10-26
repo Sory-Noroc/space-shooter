@@ -18,7 +18,6 @@ public:
 	void update() const;
 	void render() const;
 	void clean() const;
-
 	bool running() const { return isRunning;  }
 private:
 	bool isRunning;

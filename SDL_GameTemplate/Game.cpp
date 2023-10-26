@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Game.h"
 #include "Background.h"
+#include "TextureManager.h"
 #include "Spaceship.h"
 #include "ECS.h"
 #include "Components.h"
@@ -8,17 +9,18 @@
 Background* background;
 Spaceship *spaceship;
 Manager manager;
-auto& newPlayer(manager.addEntity());
+
+auto& player(manager.addEntity());
 
 const int STEP = 5;
 
-Game::Game(): isRunning(false), window(nullptr), renderer(nullptr)
+Game::Game() : isRunning(false), window(nullptr), renderer(nullptr)
 {
 }
 
 Game::~Game()
 {
-   delete spaceship;
+	delete spaceship;
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -32,15 +34,15 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	{
 		std::cout << "Subsystems initialized" << std::endl;
 		auto window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-		if (window!=nullptr)
+		if (window != nullptr)
 		{
 			std::cout << "Window created" << std::endl;
 		}
- 
+
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 		if (renderer != nullptr)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255,255);
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			std::cout << "Renderer created" << std::endl;
 		}
 		isRunning = true;
@@ -50,13 +52,12 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
-	lastUpdateTime = 0;
-	currentFrame = 0;
 	background = new Background(renderer);
 	spaceship = new Spaceship("assets/ship.png", renderer);
 	spaceship->init();
 
-	newPlayer.addComponent<PositionComponent>();
+	player.addComponent<PositionComponent>();
+	player.getComponent<PositionComponent>("assets/spaceship.png");
 }
 
 void Game::handleEvents()
@@ -64,11 +65,6 @@ void Game::handleEvents()
 	SDL_Event event;
 	int x_velocity = 0; // Flag to be set depending on key presses and updated after the loop
 
-	int currentTime = SDL_GetTicks(), animationSpeed = 20, frameCount = 10;
-	if (currentTime - lastUpdateTime >= animationSpeed) {
-		currentFrame = (currentFrame + 1) % frameCount;
-		lastUpdateTime = currentTime;
-	}
 
 	SDL_PollEvent(&event);
 	/* Poll for events. SDL_PollEvent() returns 0 when there are no  */
