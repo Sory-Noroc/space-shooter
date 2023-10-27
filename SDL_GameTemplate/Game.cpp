@@ -57,7 +57,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	spaceship->init();
 
 	player.addComponent<PositionComponent>();
-	player.getComponent<PositionComponent>("assets/spaceship.png");
 }
 
 void Game::handleEvents()

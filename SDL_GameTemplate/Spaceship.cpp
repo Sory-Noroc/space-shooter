@@ -43,7 +43,6 @@ void Spaceship::update()
 	std::cout << "Updating Spaceship";
 }
 
-
 void Spaceship::draw()
 {
 	TextureManager::Draw(texture, srcRect, destRect, renderer);

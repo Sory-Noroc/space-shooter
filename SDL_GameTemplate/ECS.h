@@ -12,13 +12,13 @@ class Entity;
 
 using ComponentID = std::size_t;
 
-inline ComponentID getComponentTypeID() {
+inline ComponentID getComponentID() {
 	static ComponentID lastID = 0;
 	return lastID++;
 }
 
 template <typename T> inline ComponentID getComponentTypeID() noexcept {
-	static ComponentID typeID = getComponentTypeID();
+	static ComponentID typeID = getComponentID();
 	return typeID;
 }
 
@@ -31,9 +31,11 @@ class Component
 {
 public:
 	Entity* entity;
-	virtual void init() {};
-	virtual void update() {};
-	virtual void draw() {};
+	virtual void init() {}
+	virtual void update() {}
+	virtual void draw() {}
+
+	virtual ~Component() {}
 };
 
 class Entity {
