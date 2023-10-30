@@ -13,9 +13,10 @@ private:
 
 public:
 	SpriteComponent() = default;
-	SpriteComponent(const char* path)
+	SpriteComponent(const char* path, SDL_Renderer* renderer)
 	{
 		texture = TextureManager::LoadTexture(path, renderer);
+		this->renderer = renderer;
 	}
 	
 	void init() override
