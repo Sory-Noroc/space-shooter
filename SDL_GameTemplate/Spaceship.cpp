@@ -40,7 +40,15 @@ void Spaceship::moveRight(int step)
 
 void Spaceship::update()
 {
-	std::cout << "Updating Spaceship";
+	destRect.x++;
+	destRect.y++;
+	/*
+	if (left == 1) {
+		moveLeft(STEP);
+	}
+	else if (right == 1) {
+		moveRight(STEP);
+	*/
 }
 
 void Spaceship::draw()

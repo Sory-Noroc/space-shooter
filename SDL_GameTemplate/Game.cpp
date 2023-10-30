@@ -3,12 +3,11 @@
 #include "Background.h"
 #include "TextureManager.h"
 #include "Spaceship.h"
-#include "ECS.h"
+#include "SpriteComponent.h"
 #include "Components.h"
 
-Background* background;
-Spaceship *spaceship;
 Manager manager;
+Background* background;
 
 auto& player(manager.addEntity());
 
@@ -20,7 +19,7 @@ Game::Game() : isRunning(false), window(nullptr), renderer(nullptr)
 
 Game::~Game()
 {
-	delete spaceship;
+	//delete spaceship;
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -53,10 +52,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
-	spaceship = new Spaceship("assets/ship.png", renderer);
-	spaceship->init();
-
 	player.addComponent<PositionComponent>();
+	player.addComponent<SpriteComponent>("assets/spaceship.png");
 }
 
 void Game::handleEvents()
@@ -121,13 +118,14 @@ void Game::handleEvents()
 
 void Game::update() const
 {
+	/*
 	if (left == 1) {
 		spaceship->moveLeft(STEP);
 	}
 	else if (right == 1) {
 		spaceship->moveRight(STEP);
-	}
-	spaceship->update();
+	} */
+	manager.refresh();
 	manager.update();
 }
 
@@ -136,8 +134,7 @@ void Game::render() const
 	SDL_RenderClear(renderer);
 	// this is where we would add stuff to render
 	background->DrawBackground();
-
-	spaceship->draw();
+	manager.draw();
 	SDL_RenderPresent(renderer);
 }
 

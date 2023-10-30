@@ -1,8 +1,8 @@
 #pragma once
-#include "Components.h"
+#include "SpriteComponent.h"
 #include <SDL.h>
 
-class Spaceship : public Component
+class Spaceship : public SpriteComponent
 {
 	SDL_Texture* texture{};
 	SDL_Renderer* renderer{};

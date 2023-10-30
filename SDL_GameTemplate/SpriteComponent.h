@@ -1,8 +1,7 @@
 #pragma once
-#include "ECS.h"
-#include "TextureManager.h"
 #include "Components.h"
 #include "SDL.h"
+#include "TextureManager.h"
 
 class SpriteComponent : public Component
 {
@@ -24,8 +23,10 @@ public:
 		position = &entity->getComponent<PositionComponent>();
 
 		srcRect.x = srcRect.y = 0;
-		srcRect.w = srcRect.h = 32;
-		destRect.w = destRect.h = 64;
+		destRect.x = 350;
+		destRect.y = 500;
+		srcRect.w = srcRect.h = 50;
+		destRect.w = destRect.h = 80;
 	}
 
 	void update() override

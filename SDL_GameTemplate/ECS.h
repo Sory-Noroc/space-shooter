@@ -48,10 +48,12 @@ public:
 public:
 	void update() {
 		for (auto& c : components) c->update();
-		for (auto& c : components) c->draw();
-
 	}
-	void draw() {}
+
+	void draw() {
+		for (auto& c : components) c->draw();
+	}
+
 	bool isActive() const { return active; }
 	void destroy() { active = false; }
 
@@ -68,7 +70,7 @@ public:
 
 		componentArray[getComponentTypeID<T>()] = c;
 		componentBitSet[getComponentTypeID<T>()] = true;
-
+		
 		c->init();
 		return *c;
 	}
@@ -89,11 +91,13 @@ public:
 			e->update();
 		}
 	}
+
 	void draw() {
 		for (auto& e : entities) {
 			e->draw();
 		}
 	}
+
 	void refresh() {
 		entities.erase(std::remove_if(std::begin(entities), std::end(entities),
 			[](const std::unique_ptr<Entity>& mEntity)
