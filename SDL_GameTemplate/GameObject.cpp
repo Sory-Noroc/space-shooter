@@ -5,7 +5,7 @@
 GameObject::GameObject(const char* textureSheet, SDL_Renderer* renderer, int x, int y)
 {
    _renderer = renderer;
-   _texture = TextureManager::LoadTexture(textureSheet, _renderer);
+   _texture = TextureManager::LoadTexture(textureSheet);
    _x = x;
    _y = y;
 }

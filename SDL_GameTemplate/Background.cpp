@@ -1,11 +1,12 @@
 #include "Background.h"
 #include "TextureManager.h"
+#include "Game.h"
 #include "SDL.h"
 
 Background::Background(SDL_Renderer* renderer)
 {
 	this->renderer = renderer;
-	space = TextureManager::LoadTexture("assets/space.png", renderer);
+	space = TextureManager::LoadTexture("assets/space.png");
 
 	src.x = 0;
 	src.y = 0;
@@ -24,5 +25,5 @@ Background::~Background()
 
 void Background::DrawBackground()
 {
-	TextureManager::Draw(space, src, dest, renderer);
+	TextureManager::Draw(space, src, dest);
 }

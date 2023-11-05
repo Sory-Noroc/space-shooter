@@ -10,7 +10,6 @@ class Game
 public:
 	Game();
 	~Game();
-	int left, right;
 
 	void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
@@ -19,8 +18,10 @@ public:
 	void render() const;
 	void clean() const;
 	bool running() const { return isRunning;  }
+
+	static SDL_Renderer* renderer;
+
 private:
 	bool isRunning;
 	SDL_Window* window;
-	SDL_Renderer* renderer;
 };

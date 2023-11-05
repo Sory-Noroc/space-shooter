@@ -2,7 +2,7 @@
 #include "Components.h"
 #include "Vector2D.h"
 
-struct PositionComponent : public Component {
+class PositionComponent : public Component {
 
 public:
 	Vector2D position;

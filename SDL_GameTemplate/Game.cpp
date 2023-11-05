@@ -8,12 +8,11 @@
 
 Manager manager;
 Background* background;
+SDL_Renderer* Game::renderer = nullptr;
 
 auto& player(manager.addEntity());
 
-const int STEP = 5;
-
-Game::Game() : isRunning(false), window(nullptr), renderer(nullptr)
+Game::Game() : isRunning(false), window(nullptr)
 {
 }
 
@@ -53,7 +52,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	background = new Background(renderer);
 	player.addComponent<PositionComponent>();
-	player.addComponent<SpriteComponent>("assets/ship.png", renderer);
+	player.addComponent<SpriteComponent>("assets/spaceship.png");
 }
 
 void Game::handleEvents()
@@ -69,44 +68,6 @@ void Game::handleEvents()
 	*/
 	switch (event.type)
 	{
-	case SDL_KEYDOWN:
-
-		switch (event.key.keysym.sym)
-		{
-		case SDLK_LEFT:
-			if (event.key.repeat == 0) {
-				left = 1;
-			}
-			break;
-
-		case SDLK_RIGHT:
-			if (event.key.repeat == 0) {
-				right = 1;
-			}
-			break;
-
-		default:
-			break;
-		}
-		break;
-
-	case SDL_KEYUP:
-		switch (event.key.keysym.sym) {
-		case SDLK_LEFT:
-			if (event.key.repeat == 0) {
-				left = 0;
-			}
-			break;
-		case SDLK_RIGHT:
-			if (event.key.repeat == 0) {
-				right = 0;
-			}
-			break;
-		default:
-			break;
-		}
-		break;
-
 	case SDL_QUIT: {
 		isRunning = false;
 		break;
@@ -127,6 +88,7 @@ void Game::update() const
 	} */
 	manager.refresh();
 	manager.update();
+	player.getComponent<PositionComponent>().position.Add(Vector2D(1, 1));
 }
 
 void Game::render() const

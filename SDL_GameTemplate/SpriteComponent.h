@@ -13,9 +13,9 @@ private:
 
 public:
 	SpriteComponent() = default;
-	SpriteComponent(const char* path, SDL_Renderer* renderer)
+	SpriteComponent(const char* path)
 	{
-		texture = TextureManager::LoadTexture(path, renderer);
+		texture = TextureManager::LoadTexture(path);
 		this->renderer = renderer;
 	}
 	
@@ -24,11 +24,8 @@ public:
 		transform = &entity->getComponent<PositionComponent>();
 
 		srcRect.x = srcRect.y = 0;
-		srcRect.w = 12;
-		srcRect.h = 24;
-		destRect.x = 350;
-		destRect.y = 500;
-		srcRect.w = srcRect.h = 50;
+		srcRect.w = 80;
+		srcRect.h = 80;
 		destRect.w = destRect.h = 80;
 	}
 
@@ -40,6 +37,6 @@ public:
 
 	void draw() override
 	{
-		TextureManager::Draw(texture, srcRect, destRect, renderer);
+		TextureManager::Draw(texture, srcRect, destRect);
 	}
 };

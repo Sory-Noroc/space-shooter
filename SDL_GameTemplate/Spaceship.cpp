@@ -10,7 +10,7 @@ Spaceship::Spaceship(const char* path, SDL_Renderer* renderer) : renderer(render
 
 void Spaceship::setTex(const char* path)
 {
-	texture = TextureManager::LoadTexture(path, renderer);
+	texture = TextureManager::LoadTexture(path);
 }
 
 void Spaceship::init()
@@ -53,6 +53,6 @@ void Spaceship::update()
 
 void Spaceship::draw()
 {
-	TextureManager::Draw(texture, srcRect, destRect, renderer);
+	TextureManager::Draw(texture, srcRect, destRect);
 }
 
