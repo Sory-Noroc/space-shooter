@@ -53,7 +53,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	background = new Background(renderer);
 	player.addComponent<PositionComponent>();
-	player.addComponent<SpriteComponent>("assets/spaceship.png");
+	player.addComponent<SpriteComponent>("assets/ship.png", 10, 100);
 	player.addComponent<KeyboardController>();
 }
 
