@@ -9,6 +9,7 @@
 Manager manager;
 Background* background;
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
 
 auto& player(manager.addEntity());
 
@@ -53,11 +54,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	background = new Background(renderer);
 	player.addComponent<PositionComponent>();
 	player.addComponent<SpriteComponent>("assets/spaceship.png");
+	player.addComponent<KeyboardController>();
 }
 
 void Game::handleEvents()
 {
-	SDL_Event event;
 	int x_velocity = 0; // Flag to be set depending on key presses and updated after the loop
 
 
@@ -88,7 +89,6 @@ void Game::update() const
 	} */
 	manager.refresh();
 	manager.update();
-	player.getComponent<PositionComponent>().position.Add(Vector2D(1, 1));
 }
 
 void Game::render() const
