@@ -29,11 +29,11 @@ public:
 
 	void update() override
 	{
-		if (position.x >= 0 && position.x <= SCREEN_WIDTH)
+		if (position.x + velocity.x * speed >= 0 && position.x + velocity.x * speed <= SCREEN_WIDTH - 75)
 		{
 			position.x += velocity.x * speed;
 		}
-		if (position.y >= -1 && position.y <= SCREEN_HEIGHT)
+		if (position.y + velocity.y * speed >= 0 && position.y + velocity.y * speed <= SCREEN_HEIGHT - 120)
 		{
 			position.y += velocity.y * speed;
 		}
