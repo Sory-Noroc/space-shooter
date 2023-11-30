@@ -3,10 +3,13 @@
 #include "Game.h"
 #include "ECS.h"
 #include "Components.h"
+#include "BulletManagerComponent.h"
 
 class KeyboardController : public Component {
 public:
 	PositionComponent* transform;
+
+	KeyboardController() = default;
 
 	void init() override
 	{
@@ -32,6 +35,9 @@ public:
 				case SDLK_d:
 					transform->velocity.x = 1;
 					break;
+				case SDLK_SPACE:
+					entity->getComponent<BulletManagerComponent>().makeBullet();
+					break;
 				default:
 					break;
 			}
@@ -54,6 +60,10 @@ public:
 			case SDLK_RIGHT:
 			case SDLK_d:
 				transform->velocity.x = 0;
+				break;
+			case SDLK_SPACE:
+
+
 				break;
 			default:
 				break;

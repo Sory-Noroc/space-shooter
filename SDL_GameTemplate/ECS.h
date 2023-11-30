@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+// #include "BulletManagerComponent.h"
 
 
 class Component;
@@ -17,8 +18,16 @@ inline ComponentID getComponentID() {
 	return lastID++;
 }
 
-template <typename T> inline ComponentID getComponentTypeID() noexcept {
-	static ComponentID typeID = getComponentID();
+inline ComponentID getNewComponentTypeID()
+{
+	static ComponentID lastID = 0u;
+	return lastID++;
+}
+
+template <typename T> inline ComponentID getComponentTypeID() noexcept
+{
+	static_assert (std::is_base_of<Component, T>::value, "");
+	static ComponentID typeID = getNewComponentTypeID();
 	return typeID;
 }
 
@@ -40,12 +49,13 @@ public:
 
 class Entity {
 public:
+	// BulletManagerComponent* bulletManager = nullptr;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
 	ComponentBitSet componentBitSet;
-public:
+
 	void update() {
 		for (auto& c : components) c->update();
 	}

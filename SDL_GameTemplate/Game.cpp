@@ -3,15 +3,18 @@
 #include "Background.h"
 #include "TextureManager.h"
 #include "Spaceship.h"
-#include "SpriteComponent.h"
 #include "Components.h"
+#include "Collision.h"
+#include "KeyboardController.h"
+#include "BulletManagerComponent.h"
 
 Manager manager;
 Background* background;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-auto& player(manager.addEntity());
+
+Entity& player(manager.addEntity());
 
 Game::Game() : isRunning(false), window(nullptr)
 {
@@ -52,9 +55,10 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
-	player.addComponent<PositionComponent>();
-	player.addComponent<SpriteComponent>("assets/ship.png", 10, 100);
+	player.addComponent<PositionComponent>(5);
+	player.addComponent<SpriteComponent>("assets/ship.png", 200, 5, 2);
 	player.addComponent<KeyboardController>();
+	player.addComponent<BulletManagerComponent>(1000, -1);
 }
 
 void Game::handleEvents()
@@ -80,13 +84,6 @@ void Game::handleEvents()
 
 void Game::update() const
 {
-	/*
-	if (left == 1) {
-		spaceship->moveLeft(STEP);
-	}
-	else if (right == 1) {
-		spaceship->moveRight(STEP);
-	} */
 	manager.refresh();
 	manager.update();
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "Components.h"
-#include "SDL.h"
 #include "TextureManager.h"
 
 class SpriteComponent : public Component
@@ -11,8 +10,8 @@ private:
 	SDL_Rect srcRect, destRect;
 	SDL_Renderer* renderer;
 	bool animated = false;
-	int frames = 0;
-	int speed = 100;  // delay in ms between animations
+	int imageCols = 0, imageRows = 0;
+	int speed = 200;  // delay in ms between animations
 
 public:
 	SpriteComponent() = default;
@@ -22,13 +21,22 @@ public:
 		this->renderer = renderer;
 	}
 
-	SpriteComponent(const char* path, int nFrames, int mSpeed)
+	SpriteComponent(const char* path, int mSpeed, int imageColumns, int imageRows)
 	{
 		animated = true;
-		frames = nFrames;
-		speed = mSpeed;
-		texture = TextureManager::LoadTexture(path);
+		this->imageCols = imageColumns;
+		this->imageRows = imageRows;
+		this->speed = mSpeed;
+		this->texture = TextureManager::LoadTexture(path);
 		this->renderer = renderer;
+	}
+
+	~SpriteComponent() {
+		SDL_DestroyTexture(texture);
+	}
+
+	SDL_Rect getImageRect() {
+		return destRect;
 	}
 	
 	void init() override
@@ -36,23 +44,24 @@ public:
 		transform = &entity->getComponent<PositionComponent>();
 
 		srcRect.x = srcRect.y = 0;
-		srcRect.w = 16;
-		srcRect.h = 24;
-		destRect.w = 16 * 5;
-		destRect.h = 24 * 5;
+		srcRect.w = transform->width;
+		srcRect.h = transform->height;
+		destRect.w = transform->width * transform->scale;
+		destRect.h = transform->height * transform->scale;
 	}
 
 	void update() override
 	{
+		std::cout << "Updating SpriteComponent at " << transform->position.x << ", " <<  transform->position.y << std::endl;
 		if (animated) {
-			int sprite_tick = static_cast<int>((SDL_GetTicks() / speed) % frames);
-			if (sprite_tick >= 5) {
+			int sprite_tick = static_cast<int>((SDL_GetTicks() / speed) % (imageRows * imageCols));
+			if (sprite_tick >= imageCols) {
 				srcRect.y = srcRect.h;
 			}
 			else {
 				srcRect.y = 0;
 			}
-			srcRect.x = srcRect.w * (sprite_tick % 5);
+			srcRect.x = srcRect.w * (sprite_tick % imageCols);
 		}
 
 
