@@ -58,7 +58,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<PositionComponent>(5);
 	player.addComponent<SpriteComponent>("assets/ship.png", 200, 5, 2);
 	player.addComponent<KeyboardController>();
-	player.addComponent<BulletManagerComponent>(1000, -1);
+	player.addComponent<BulletManagerComponent>(1000, 4, -1);
 }
 
 void Game::handleEvents()

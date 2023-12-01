@@ -54,6 +54,19 @@ public:
 		velocity.y = 0;
 	}
 
+	PositionComponent* setSpeed(int speed) { 
+		this->speed = speed; 
+		return this; 
+	}
+	PositionComponent* setScale(int scale) { 
+		this->scale = scale; 
+		return this; 
+	}
+	PositionComponent* setVelocity(Vector2D v) { 
+		this->velocity = v; 
+		return this; 
+	}
+
 	void update() override
 	{
 		if (position.x + velocity.x * speed >= 0 && position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))

@@ -11,16 +11,17 @@ class BulletManagerComponent : public Component, public Manager {
 	SpriteComponent* sprite = nullptr;
 	PositionComponent* position = nullptr;
 	int previousTime = 0;
-	int delay = 1000;
+	int delay = 1000, imageIndex = 0, scale = 3;
 
 public:
 	BulletManagerComponent() = default;
-	BulletManagerComponent(int delay, float velocity) {
+	BulletManagerComponent(int delay, int scale, float velocity) {
 		// Delay between the bullets being shot
 		this->delay = delay;
 		// IF Velocity is 1 => moving down
 		this->velocity.y = velocity;
-		imageSizes[0] = Vector2D(16, 16);
+		this->scale = scale;
+		imageSizes[0] = Vector2D(5, 5);
 	}
 
 	~BulletManagerComponent() {
@@ -30,7 +31,6 @@ public:
 	void init() override {
 		sprite = &entity->getComponent<SpriteComponent>();
 		position = &entity->getComponent<PositionComponent>();
-		
 	}
 
 	void activate() { active = true; }
@@ -38,17 +38,16 @@ public:
 
 	void setStartPosition() {
 		SDL_Rect temp = sprite->getImageRect();
-		startPos.y = temp.y;
-		startPos.x = temp.x + temp.w / 2.;
+		startPos.y = temp.y - imageSizes[imageIndex].y;
+		startPos.x = temp.x + temp.w / 2. - imageSizes[imageIndex].x * scale / 2.;
 	}
 
 	void makeBullet() {
 		setStartPosition();
 		Entity *bullet = &addEntity();
-		// Todo: Need setter
-		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, imageSizes[0].x, imageSizes[0].y, true).velocity = this->velocity;
-		bullet->getComponent<PositionComponent>().speed = 1;
-		bullet->getComponent<PositionComponent>().scale = 3;
+		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, imageSizes[imageIndex].x, imageSizes[imageIndex].y, true)
+			.setSpeed(1)->setScale(4);
+		bullet->getComponent<PositionComponent>().setVelocity(this->velocity);
 		bullet->addComponent<SpriteComponent>("assets/laser-bolts.png", 50, 2, 1);
 	}
 
