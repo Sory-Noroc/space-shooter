@@ -36,7 +36,7 @@ public:
 					transform->velocity.x = 1;
 					break;
 				case SDLK_SPACE:
-					entity->getComponent<BulletManagerComponent>().makeBullet();
+					entity->getComponent<BulletManagerComponent>().activate();
 					break;
 				default:
 					break;
@@ -62,8 +62,7 @@ public:
 				transform->velocity.x = 0;
 				break;
 			case SDLK_SPACE:
-
-
+				entity->getComponent<BulletManagerComponent>().deactivate();
 				break;
 			default:
 				break;

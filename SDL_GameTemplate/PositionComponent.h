@@ -14,7 +14,7 @@ public:
 	int scale = 1;
 	int speed = 3;
 
-	bool outOfBounds = false;
+	bool deleteOnEdge = false;
 
 	PositionComponent() {
 		position.x = 0.0f;
@@ -41,6 +41,14 @@ public:
 		this->height = height;
 	}
 
+	PositionComponent(float x, float y, int width, int height, bool deleteOnEdge) {
+		position.x = x;
+		position.y = y;
+		this->width = width;
+		this->height = height;
+		this->deleteOnEdge = deleteOnEdge;
+	}
+
 	void init() override {
 		velocity.x = 0;
 		velocity.y = 0;
@@ -51,17 +59,44 @@ public:
 		if (position.x + velocity.x * speed >= 0 && position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))
 		{
 			position.x += velocity.x * speed;
-		} else 
+		} else if (deleteOnEdge == true)
 		{
-			outOfBounds = true;
+			entity->destroy();
+		}
+
+		if (position.y + velocity.y * speed >= 0 && position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale))
+		{
+			position.y += velocity.y * speed;
+		}
+		else if (deleteOnEdge == true)
+		{
+			entity->destroy();
+		}
+	}
+};
+
+class ShipPositionComponent : public PositionComponent {
+	
+	ShipPositionComponent(int scale) : PositionComponent(scale) {
+		this->scale = scale;
+		position.x = 0.0f;
+		position.y = 0.0f;
+	}
+
+	void update() override {
+		if (position.x + velocity.x * speed >= 0 && position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))
+		{
+			position.x += velocity.x * speed;
 		}
 		if (position.y + velocity.y * speed >= 0 && position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale))
 		{
 			position.y += velocity.y * speed;
 		}
-		else
-		{
-			outOfBounds = true;
-		}
+	}
+};
+
+class BulletPositionComponent : public PositionComponent {
+	void update() override {
+		// Todo
 	}
 };
