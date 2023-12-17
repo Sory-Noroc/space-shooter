@@ -7,8 +7,9 @@
 #include "Collision.h"
 #include "KeyboardController.h"
 #include "BulletManagerComponent.h"
+#include "GameManager.h"
 
-Manager manager;
+GameManager manager;
 Background* background;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -55,10 +56,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
-	player.addComponent<PositionComponent>(5);
+	player.addComponent<PositionComponent>(5, stop);
 	player.addComponent<SpriteComponent>("assets/ship.png", 200, 5, 2);
 	player.addComponent<KeyboardController>();
 	player.addComponent<BulletManagerComponent>(1000, 4, -1);
+	manager.spawnEnemy(100, 100);
 }
 
 void Game::handleEvents()

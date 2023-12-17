@@ -8,6 +8,7 @@
 
 class Component;
 class Entity;
+enum OnEdge { ignore, stop };
 
 using ComponentID = std::size_t;
 
@@ -47,7 +48,6 @@ public:
 
 class Entity {
 public:
-	// BulletManagerComponent* bulletManager = nullptr;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 

@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "Vector2D.h"
 
+// enum OnEdge {ignore, stop};
+
 class PositionComponent : public Component {
 
 public:
@@ -14,17 +16,18 @@ public:
 	int scale = 1;
 	int speed = 3;
 
-	bool deleteOnEdge = false;
+	OnEdge actionEdge = OnEdge(ignore);
 
 	PositionComponent() {
 		position.x = 0.0f;
 		position.y = 0.0f;
 	}
 
-	PositionComponent(int scale) {
+	PositionComponent(int scale, OnEdge action) {
 		this->scale = scale;
 		position.x = 0.0f;
 		position.y = 0.0f;
+		this->actionEdge = action;
 	}
 
 	PositionComponent(float x, float y)
@@ -41,12 +44,12 @@ public:
 		this->height = height;
 	}
 
-	PositionComponent(float x, float y, int width, int height, bool deleteOnEdge) {
+	PositionComponent(float x, float y, int width, int height, OnEdge actOnEdge) {
 		position.x = x;
 		position.y = y;
 		this->width = width;
 		this->height = height;
-		this->deleteOnEdge = deleteOnEdge;
+		this->actionEdge = actOnEdge;
 	}
 
 	void init() override {
@@ -69,47 +72,42 @@ public:
 
 	void update() override
 	{
-		if (position.x + velocity.x * speed >= 0 && position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))
-		{
-			position.x += velocity.x * speed;
-		} else if (deleteOnEdge == true)
-		{
-			entity->destroy();
+		// start: -x, -y
+		// dimensions: 3 * width, 3 * height
+		if (actionEdge == stop) {
+			if (position.x + velocity.x * speed >= 0 &&
+					position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))
+			{
+				position.x += velocity.x * speed;
+			}
+
+			if (position.y + velocity.y * speed >= 0 &&
+					position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale))
+			{
+				position.y += velocity.y * speed;
+			}
 		}
 
-		if (position.y + velocity.y * speed >= 0 && position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale))
-		{
-			position.y += velocity.y * speed;
+		if (actionEdge == ignore) {
+			if (position.x + velocity.x * speed >= -SCREEN_WIDTH &&
+				position.x + velocity.x * speed <= 2 * SCREEN_WIDTH - (width * scale))
+			{
+				position.x += velocity.x * speed;
+			}
+			else {
+				entity->destroy();
+			}
 		}
-		else if (deleteOnEdge == true)
-		{
-			entity->destroy();
-		}
-	}
-};
 
-class ShipPositionComponent : public PositionComponent {
-	
-	ShipPositionComponent(int scale) : PositionComponent(scale) {
-		this->scale = scale;
-		position.x = 0.0f;
-		position.y = 0.0f;
-	}
-
-	void update() override {
-		if (position.x + velocity.x * speed >= 0 && position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))
-		{
-			position.x += velocity.x * speed;
+		if (actionEdge == ignore) {
+			if (position.y + velocity.y * speed >= -SCREEN_HEIGHT &&
+					position.y + velocity.y * speed <= 2 * SCREEN_HEIGHT - (width * scale))
+			{
+				position.y += velocity.y * speed;
+			}
+			else {
+				entity -> destroy();
+			}
 		}
-		if (position.y + velocity.y * speed >= 0 && position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale))
-		{
-			position.y += velocity.y * speed;
-		}
-	}
-};
-
-class BulletPositionComponent : public PositionComponent {
-	void update() override {
-		// Todo
 	}
 };

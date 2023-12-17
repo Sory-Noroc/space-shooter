@@ -45,7 +45,7 @@ public:
 	void makeBullet() {
 		setStartPosition();
 		Entity *bullet = &addEntity();
-		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, imageSizes[imageIndex].x, imageSizes[imageIndex].y, true)
+		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, imageSizes[imageIndex].x, imageSizes[imageIndex].y, ignore)
 			.setSpeed(1)->setScale(4);
 		bullet->getComponent<PositionComponent>().setVelocity(this->velocity);
 		bullet->addComponent<SpriteComponent>("assets/laser-bolts.png", 50, 2, 1);
