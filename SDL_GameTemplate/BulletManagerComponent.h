@@ -1,53 +1,56 @@
 #pragma once
 #include "Components.h"
 #include "Vector2D.h"
+#include "entityData.h"
 
 class BulletManagerComponent : public Component, public Manager {
 
 	bool active = false;
 	Entity* shooter = entity;
 	Vector2D velocity, startPos;
-	Vector2D* imageSizes = new Vector2D[10];
-	SpriteComponent* sprite = nullptr;
-	PositionComponent* position = nullptr;
+	SpriteComponent* shooterSprite = nullptr;
+	PositionComponent* shooterPosition = nullptr;
 	int previousTime = 0;
-	int delay = 1000, imageIndex = 0, scale = 3;
+	int delay = 1000, imageIndex = 0, scale = 0;
 
 public:
 	BulletManagerComponent() = default;
-	BulletManagerComponent(int delay, int scale, float velocity) {
+	BulletManagerComponent(int delay, int scale, float velocity, int imageIndex) {
 		// Delay between the bullets being shot
 		this->delay = delay;
 		// IF Velocity is 1 => moving down
 		this->velocity.y = velocity;
+		this->imageIndex = imageIndex;
 		this->scale = scale;
-		imageSizes[0] = Vector2D(5, 5);
-	}
-
-	~BulletManagerComponent() {
-		delete[] imageSizes;
 	}
 
 	void init() override {
-		sprite = &entity->getComponent<SpriteComponent>();
-		position = &entity->getComponent<PositionComponent>();
+		shooterSprite = &entity->getComponent<SpriteComponent>();
+		shooterPosition = &entity->getComponent<PositionComponent>();
 	}
 
 	void activate() { active = true; }
 	void deactivate() { active = false; }
 
-	void setStartPosition() {
-		SDL_Rect temp = sprite->getImageRect();
-		startPos.y = temp.y - imageSizes[imageIndex].y;
-		startPos.x = temp.x + temp.w / 2. - imageSizes[imageIndex].x * scale / 2.;
+	void setStartPosition(float orientation) {
+		SDL_Rect image = shooterSprite->getImageRect();
+		startPos.x = image.x + image.w / 2. - (bulletData[imageIndex].w * scale) / 2.;
+		
+		if (orientation == -1)
+		{
+			startPos.y = image.y - bulletData[imageIndex].h;
+		}
+		else 
+		{
+			startPos.y = image.y + image.h;
+		}
 	}
 
 	void makeBullet() {
-		setStartPosition();
+		setStartPosition(velocity.y);
 		Entity *bullet = &addEntity();
-		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, imageSizes[imageIndex].x, imageSizes[imageIndex].y, ignore)
-			.setSpeed(1)->setScale(4);
-		bullet->getComponent<PositionComponent>().setVelocity(this->velocity);
+		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, bulletData[imageIndex].w, bulletData[imageIndex].h, ignore)
+			.setSpeed(2)->setScale(scale)->setVelocity(velocity);
 		bullet->addComponent<SpriteComponent>("assets/laser-bolts.png", 50, 2, 1);
 	}
 

@@ -3,18 +3,16 @@
 #include "Game.h"
 #include "Vector2D.h"
 
-// enum OnEdge {ignore, stop};
-
 class PositionComponent : public Component {
 
 public:
 	Vector2D position;
 	Vector2D velocity;
 
-	int height = 24;
-	int width = 16;
-	int scale = 1;
-	int speed = 3;
+	int height = 0;
+	int width = 0;
+	int scale = 0;
+	int speed = 0;
 
 	OnEdge actionEdge = OnEdge(ignore);
 

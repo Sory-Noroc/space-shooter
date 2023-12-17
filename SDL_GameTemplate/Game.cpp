@@ -8,6 +8,7 @@
 #include "KeyboardController.h"
 #include "BulletManagerComponent.h"
 #include "GameManager.h"
+#include "entityData.h"
 
 GameManager manager;
 Background* background;
@@ -55,18 +56,20 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
+	int shipIndex = 0;
 	background = new Background(renderer);
-	player.addComponent<PositionComponent>(5, stop);
-	player.addComponent<SpriteComponent>("assets/ship.png", 200, 5, 2);
+	entityData ship = shipData[shipIndex];
+	entityData shipBullet = bulletData[shipIndex];
+	player.addComponent<PositionComponent>(0.0f, 0.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
+	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay,ship.spriteCols, ship.spriteRows);
 	player.addComponent<KeyboardController>();
-	player.addComponent<BulletManagerComponent>(1000, 4, -1);
-	manager.spawnEnemy(100, 100);
+	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1, 0);
+	manager.spawnEnemy(100, 100, 1, 1);
 }
 
 void Game::handleEvents()
 {
 	int x_velocity = 0; // Flag to be set depending on key presses and updated after the loop
-
 
 	SDL_PollEvent(&event);
 	/* Poll for events. SDL_PollEvent() returns 0 when there are no  */
