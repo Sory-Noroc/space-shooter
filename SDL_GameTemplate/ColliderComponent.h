@@ -3,17 +3,19 @@
 #include "SDL.h"
 #include "ECS.h"
 #include "Components.h"
+#include "Collision.h"
 
 class ColliderComponent : public Component {
+	int tag;
 	SDL_Rect collider;
-	std::string tag;
-
 	PositionComponent* transform;
 
+public:
+	ColliderComponent(int tag) {
+		this->tag = tag;
+	}
+
 	void init() override {
-		if (!entity->hasComponent<PositionComponent>()) {
-			entity->addComponent<PositionComponent>();
-		}
 		transform = &entity->getComponent<PositionComponent>();
 	}
 
@@ -23,5 +25,9 @@ class ColliderComponent : public Component {
 		collider.w = transform->width * transform->scale;
 		collider.h = transform->height * transform->scale;
 
+	}
+
+	SDL_Rect getCollider() {
+		return collider;
 	}
 };

@@ -8,6 +8,7 @@
 
 class Component;
 class Entity;
+class Manager;
 enum OnEdge { ignore, stop };
 
 using ComponentID = std::size_t;
@@ -48,6 +49,7 @@ public:
 
 class Entity {
 public:
+	Manager* manager = nullptr;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
@@ -66,7 +68,7 @@ public:
 	void destroy() { active = false; }
 
 	template <typename T> bool hasComponent() const {
-		return componentBitSet[getComponentTypeID<T>];
+		return componentBitSet[getComponentTypeID<T>()];
 	}
 
 	template <typename T, typename... TArgs>
@@ -90,10 +92,8 @@ public:
 };
 
 class Manager {
-private:
-	std::vector<std::unique_ptr<Entity>> entities;
-
 public:
+	std::vector<std::unique_ptr<Entity>> entities;
 	void update() {
 		for (auto& e : entities) {
 			e->update();
@@ -119,6 +119,7 @@ public:
 		Entity* e = new Entity();
 		std::unique_ptr<Entity> uPtr{ e };
 		entities.emplace_back(std::move(uPtr));
+		e->manager = this;
 		return *e;
 	}
 };

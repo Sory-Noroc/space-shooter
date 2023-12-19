@@ -9,6 +9,7 @@
 #include "BulletManagerComponent.h"
 #include "GameManager.h"
 #include "entityData.h"
+#include "ECS.h"
 
 GameManager manager;
 Background* background;
@@ -63,7 +64,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<PositionComponent>(0.0f, 0.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
 	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay,ship.spriteCols, ship.spriteRows);
 	player.addComponent<KeyboardController>();
-	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1, 0);
+	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
+	player.addComponent<ColliderComponent>(playerShip);
 	manager.spawnEnemy(100, 100, 1, 1);
 }
 

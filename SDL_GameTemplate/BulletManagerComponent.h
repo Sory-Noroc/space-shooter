@@ -2,6 +2,7 @@
 #include "Components.h"
 #include "Vector2D.h"
 #include "entityData.h"
+#include "Animation.h"
 
 class BulletManagerComponent : public Component, public Manager {
 
@@ -34,11 +35,11 @@ public:
 
 	void setStartPosition(float orientation) {
 		SDL_Rect image = shooterSprite->getImageRect();
-		startPos.x = image.x + image.w / 2. - (bulletData[imageIndex].w * scale) / 2.;
+		startPos.x = image.x + image.w / 2.f - (bulletData[imageIndex].w * scale) / 2.f;
 		
 		if (orientation == -1)
 		{
-			startPos.y = image.y - bulletData[imageIndex].h;
+			startPos.y = image.y - (bulletData[imageIndex].h * scale);
 		}
 		else 
 		{
@@ -49,9 +50,22 @@ public:
 	void makeBullet() {
 		setStartPosition(velocity.y);
 		Entity *bullet = &addEntity();
-		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, bulletData[imageIndex].w, bulletData[imageIndex].h, ignore)
+		entityData shot = bulletData[imageIndex];
+		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, shot.w, shot.h, ignore)
 			.setSpeed(2)->setScale(scale)->setVelocity(velocity);
-		bullet->addComponent<SpriteComponent>("assets/laser-bolts.png", 50, 2, 1);
+		bullet->addComponent<SpriteComponent>(shot.path, shot.spriteDelay, shot.spriteCols, shot.spriteRows);
+		bullet->addComponent<ColliderComponent>(tag::bullet);
+	}
+
+	void checkCollisions() {
+		for (auto& bullet : entities) {
+			// for each bullet
+			for (auto& ship : entity->manager->entities) {
+				if (Collision::AABB(bullet->getComponent<ColliderComponent>().getCollider(), ship->getComponent<ColliderComponent>().getCollider())) {
+					ship->destroy();
+				}
+			}
+		}
 	}
 
 	void update() override {
@@ -60,6 +74,7 @@ public:
 			makeBullet();
 			previousTime = currentTime;
 		}
+		checkCollisions();
 		Manager::refresh();
 		Manager::update();
 	}
