@@ -1,3 +1,7 @@
 SDL_GameTemplate\*.vcxproj*
 SDL_GameTemplate\x64
 
+/SDL_GameTemplate/Player.h
+/SDL_GameTemplate/Player.cpp
+/SDL_GameTemplate/Map.h
+/SDL_GameTemplate/Map.cpp

@@ -1,7 +1,6 @@
 #include "TextureManager.h"
 #include "Game.h"
 #include "SDL.h"
-#include "SDL_image.h"
 
 SDL_Texture* TextureManager::LoadTexture(const char* fileName)
 {
