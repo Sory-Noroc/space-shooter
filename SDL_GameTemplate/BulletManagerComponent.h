@@ -4,10 +4,11 @@
 #include "entityData.h"
 #include "Animation.h"
 
-class BulletManagerComponent : public Component, public Manager {
+class Game;
+
+class BulletManagerComponent : public Component {
 
 	bool active = false;
-	Entity* shooter = entity;
 	Vector2D velocity, startPos;
 	SpriteComponent* shooterSprite = nullptr;
 	PositionComponent* shooterPosition = nullptr;
@@ -28,6 +29,10 @@ public:
 	void init() override {
 		shooterSprite = &entity->getComponent<SpriteComponent>();
 		shooterPosition = &entity->getComponent<PositionComponent>();
+	
+		if (!shooterSprite || !shooterPosition) {
+			std::cerr << "Error: Shooter sprite or position component not found." << std::endl;
+		}
 	}
 
 	void activate() { active = true; }
@@ -48,24 +53,13 @@ public:
 	}
 
 	void makeBullet() {
-		setStartPosition(velocity.y);
-		Entity *bullet = &addEntity();
+		Entity *bullet = &entity->manager.addEntity();
 		entityData shot = bulletData[imageIndex];
+		setStartPosition(velocity.y);
 		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, shot.w, shot.h, ignore)
 			.setSpeed(2)->setScale(scale)->setVelocity(velocity);
 		bullet->addComponent<SpriteComponent>(shot.path, shot.spriteDelay, shot.spriteCols, shot.spriteRows);
-		bullet->addComponent<ColliderComponent>(tag::bullet);
-	}
-
-	void checkCollisions() {
-		for (auto& bullet : entities) {
-			// for each bullet
-			for (auto& ship : entity->manager->entities) {
-				if (Collision::AABB(bullet->getComponent<ColliderComponent>().getCollider(), ship->getComponent<ColliderComponent>().getCollider())) {
-					ship->destroy();
-				}
-			}
-		}
+		bullet->addComponent<ColliderComponent>(entity->getComponent<ColliderComponent>().tag);
 	}
 
 	void update() override {
@@ -74,12 +68,5 @@ public:
 			makeBullet();
 			previousTime = currentTime;
 		}
-		checkCollisions();
-		Manager::refresh();
-		Manager::update();
-	}
-
-	void draw() override {
-		Manager::draw();
 	}
 };

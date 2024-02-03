@@ -1,8 +1,6 @@
-#include <iostream>
 #include "Game.h"
 #include "Background.h"
 #include "TextureManager.h"
-#include "Spaceship.h"
 #include "Components.h"
 #include "Collision.h"
 #include "KeyboardController.h"
@@ -16,8 +14,10 @@ Background* background;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
+std::vector<ColliderComponent*> Game::colliders;
+std::vector<ColliderComponent*> Game::entitiesHit;
 
-Entity& player(manager.addEntity());
+auto& player(manager.addEntity());
 
 Game::Game() : isRunning(false), window(nullptr)
 {
@@ -61,12 +61,12 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	background = new Background(renderer);
 	entityData ship = shipData[shipIndex];
 	entityData shipBullet = bulletData[shipIndex];
-	player.addComponent<PositionComponent>(0.0f, 0.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
+	player.addComponent<PositionComponent>(200.0f, 200.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
+	player.addComponent<ColliderComponent>(champ);
 	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay,ship.spriteCols, ship.spriteRows);
 	player.addComponent<KeyboardController>();
 	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
-	player.addComponent<ColliderComponent>(playerShip);
-	manager.spawnEnemy(100, 100, 1, 1);
+	// manager.spawnEnemy(300, 10, 1, 1);
 }
 
 void Game::handleEvents()
@@ -91,6 +91,29 @@ void Game::handleEvents()
 
 void Game::update() const
 {
+	for (auto& coll1 : colliders) {
+		for (auto& coll2 : colliders) {
+			if (coll1 != coll2 && coll1->is_colliding(*coll2)) {
+				entitiesHit.push_back(coll1);
+				entitiesHit.push_back(coll2);
+				// Make explosion or smth
+				coll1->entity->destroy();
+				coll2->entity->destroy();
+			}
+		}
+	}
+	Game::colliders.erase(std::remove_if(std::begin(Game::colliders), std::end(Game::colliders),
+		[](ColliderComponent* coll)
+		{
+			// If coll is in entitiesHit then delete it
+			if (std::find(entitiesHit.begin(), entitiesHit.end(), coll) != entitiesHit.end()) {
+				
+				return true;
+			}
+		}),
+		std::end(Game::colliders)
+	);
+	entitiesHit.clear();
 	manager.refresh();
 	manager.update();
 }

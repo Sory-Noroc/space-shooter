@@ -49,12 +49,14 @@ public:
 
 class Entity {
 public:
-	Manager* manager = nullptr;
+	Manager& manager;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
 	ComponentBitSet componentBitSet;
+
+	Entity(Manager& mManager) : manager(mManager) {}
 
 	void update() {
 		for (auto& c : components) c->update();
@@ -65,6 +67,7 @@ public:
 	}
 
 	bool isActive() const { return active; }
+
 	void destroy() { active = false; }
 
 	template <typename T> bool hasComponent() const {
@@ -116,10 +119,9 @@ public:
 	}
 
 	Entity& addEntity() {
-		Entity* e = new Entity();
+		Entity* e = new Entity(*this);
 		std::unique_ptr<Entity> uPtr{ e };
 		entities.emplace_back(std::move(uPtr));
-		e->manager = this;
 		return *e;
 	}
 };

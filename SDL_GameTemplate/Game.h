@@ -1,9 +1,12 @@
 #pragma once
 #include <SDL.h>
+#include <iostream>
+#include <vector>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 640;
+class ColliderComponent;
 
 class Game
 {
@@ -19,6 +22,8 @@ public:
 	void clean() const;
 	bool running() const { return isRunning;  }
 
+	static std::vector<ColliderComponent*> colliders;
+	static std::vector<ColliderComponent*> entitiesHit;
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 

@@ -4,4 +4,4 @@
 #include "SpriteComponent.h"
 #include "ColliderComponent.h"
 
-enum tag { playerShip, enemy, bullet };
+enum tag { champ, enemy };

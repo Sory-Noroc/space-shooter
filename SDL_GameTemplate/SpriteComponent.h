@@ -48,11 +48,12 @@ public:
 		srcRect.h = transform->height;
 		destRect.w = transform->width * transform->scale;
 		destRect.h = transform->height * transform->scale;
+		destRect.x = (int)transform->position.x;
+		destRect.y = (int)transform->position.y;
 	}
 
 	void update() override
 	{
-		std::cout << "Updating SpriteComponent at " << transform->position.x << ", " <<  transform->position.y << std::endl;
 		if (animated) {
 			int sprite_tick = static_cast<int>((SDL_GetTicks() / speed) % (imageRows * imageCols));
 			if (sprite_tick >= imageCols) {
