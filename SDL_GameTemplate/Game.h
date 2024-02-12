@@ -20,12 +20,21 @@ public:
 	void update() const;
 	void render() const;
 	void clean() const;
-	bool running() const { return isRunning;  }
-
+	bool running() const { return isRunning; }
 	static std::vector<ColliderComponent*> colliders;
 	static std::vector<ColliderComponent*> entitiesHit;
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
+
+	static void eraseCollider(ColliderComponent* c) {
+		colliders.erase(std::remove_if(std::begin(colliders), std::end(colliders),
+			[c](ColliderComponent* coll)
+			{
+				return coll == c;
+			}),
+			std::end(colliders)
+				);
+	}
 
 private:
 	bool isRunning;

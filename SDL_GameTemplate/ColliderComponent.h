@@ -3,8 +3,10 @@
 #include "SDL.h"
 #include "ECS.h"
 #include <algorithm>
-#include "Components.h"
 #include "Collision.h"
+#include "Components.h"
+
+enum tag { champ, champBullet, enemy, enemyBullet };
 
 class ColliderComponent : public Component {
 	SDL_Rect collider;
@@ -23,7 +25,7 @@ public:
 		}
 		transform = &entity->getComponent<PositionComponent>();
 		update(); // Set the collider to the correct position
-		Game::colliders.push_back(this);
+		Game::colliders.emplace_back(this);
 	}
 
 	void update() override {
@@ -33,14 +35,38 @@ public:
 		collider.h = transform->height * transform->scale;
 	}
 
-	bool is_colliding(ColliderComponent other) {
-		if (Collision::AABB(*this, other)) {
+	bool is_colliding(ColliderComponent &other) {
+		if (Collision::AABB(this->getCollider(), other.getCollider()) &&
+			!isSame(other)) {
 			return true;
 		}
 		return false;
 	}
 
+	bool isSame(ColliderComponent& other) {
+		return this->tag == other.tag || getAntiTag() == other.tag;
+	}
+
+	enum tag getAntiTag() {
+		switch (tag) {
+
+		case enemy: return enemyBullet;
+		case champ: return champBullet;
+
+		case enemyBullet: return enemy;
+		case champBullet: return champ;
+
+		default: return enemyBullet;
+		}
+	}
+
 	SDL_Rect getCollider() {
 		return collider;
+	}
+
+	~ColliderComponent() {
+		if (!Game::colliders.empty()) {
+			Game::eraseCollider(this);
+		}
 	}
 };

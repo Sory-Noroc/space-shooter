@@ -7,7 +7,7 @@
 class Game;
 
 class BulletManagerComponent : public Component {
-
+	int bulletCount = 0;
 	bool active = false;
 	Vector2D velocity, startPos;
 	SpriteComponent* shooterSprite = nullptr;
@@ -53,13 +53,14 @@ public:
 	}
 
 	void makeBullet() {
-		Entity *bullet = &entity->manager.addEntity();
+		Entity* bullet = new Entity(entity->manager);
+		entity->manager.addEntityToQueue(bullet);
 		entityData shot = bulletData[imageIndex];
 		setStartPosition(velocity.y);
 		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, shot.w, shot.h, ignore)
 			.setSpeed(2)->setScale(scale)->setVelocity(velocity);
 		bullet->addComponent<SpriteComponent>(shot.path, shot.spriteDelay, shot.spriteCols, shot.spriteRows);
-		bullet->addComponent<ColliderComponent>(entity->getComponent<ColliderComponent>().tag);
+		bullet->addComponent<ColliderComponent>(entity->getComponent<ColliderComponent>().getAntiTag());
 	}
 
 	void update() override {

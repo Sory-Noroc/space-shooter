@@ -72,40 +72,47 @@ public:
 	{
 		// start: -x, -y
 		// dimensions: 3 * width, 3 * height
-		if (actionEdge == stop) {
-			if (position.x + velocity.x * speed >= 0 &&
-					position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale))
-			{
-				position.x += velocity.x * speed;
-			}
 
-			if (position.y + velocity.y * speed >= 0 &&
-					position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale))
-			{
-				position.y += velocity.y * speed;
-			}
+		if (isInScreenX() || (actionEdge == ignore && isInOutX()))
+		{
+			position.x += velocity.x * speed;
 		}
-
-		if (actionEdge == ignore) {
-			if (position.x + velocity.x * speed >= -SCREEN_WIDTH &&
-				position.x + velocity.x * speed <= 2 * SCREEN_WIDTH - (width * scale))
-			{
-				position.x += velocity.x * speed;
-			}
-			else {
+		else {
+			if (actionEdge == ignore) {
 				entity->destroy();
 			}
 		}
 
-		if (actionEdge == ignore) {
-			if (position.y + velocity.y * speed >= -SCREEN_HEIGHT &&
-					position.y + velocity.y * speed <= 2 * SCREEN_HEIGHT - (width * scale))
-			{
-				position.y += velocity.y * speed;
-			}
-			else {
-				entity -> destroy();
+		if (isInScreenY() || (actionEdge == ignore && isInOutY()))
+		{
+			position.y += velocity.y * speed;
+		}
+		else {
+			if (actionEdge == ignore) {
+				entity->destroy();
 			}
 		}
 	}
+
+	bool isInScreenX() {
+		return (position.x + velocity.x * speed >= 0 &&
+			position.x + velocity.x * speed <= SCREEN_WIDTH - (width * scale)) ? true : false;
+	}
+	
+	bool isInScreenY() {
+		return (position.y + velocity.y * speed >= 0 &&
+			position.y + velocity.y * speed <= SCREEN_HEIGHT - (height * scale)) ? true : false;
+	}
+	
+	bool isInOutX() {
+		return (position.x + velocity.x * speed >= -SCREEN_WIDTH &&
+			position.x + velocity.x * speed <= 2 * SCREEN_WIDTH - (width * scale)) ? true : false;
+	}
+	
+	bool isInOutY() {
+		return (position.y + velocity.y * speed >= -SCREEN_HEIGHT &&
+			position.y + velocity.y * speed <= 2 * SCREEN_HEIGHT - (width * scale)) ? true : false;
+	}
+
+
 };

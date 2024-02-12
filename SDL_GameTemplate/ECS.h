@@ -39,7 +39,7 @@ using ComponentArray = std::array<Component *, maxComponents>;
 class Component
 {
 public:
-	Entity* entity;
+	Entity* entity = nullptr;
 	virtual void init() {}
 	virtual void update() {}
 	virtual void draw() {}
@@ -68,7 +68,7 @@ public:
 
 	bool isActive() const { return active; }
 
-	void destroy() { active = false; }
+ 	void destroy() { active = false; }
 
 	template <typename T> bool hasComponent() const {
 		return componentBitSet[getComponentTypeID<T>()];
@@ -120,8 +120,14 @@ public:
 
 	Entity& addEntity() {
 		Entity* e = new Entity(*this);
-		std::unique_ptr<Entity> uPtr{ e };
-		entities.emplace_back(std::move(uPtr));
+		addEntity(e);
 		return *e;
 	}
+
+	void addEntity(Entity* e) {
+		std::unique_ptr<Entity> uPtr{ e };
+		entities.emplace_back(std::move(uPtr));
+	}
+
+	virtual void addEntityToQueue(Entity *) {};
 };

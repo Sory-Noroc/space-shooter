@@ -57,16 +57,19 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
+	SDL_Color white = { 255, 255, 255, 255 };
+	//TTF_RenderText_Solid(TTF_OpenFont("assets/Terminal.ttf", 28), "Space Shooter", white);
+
 	int shipIndex = 0;
 	background = new Background(renderer);
 	entityData ship = shipData[shipIndex];
 	entityData shipBullet = bulletData[shipIndex];
 	player.addComponent<PositionComponent>(200.0f, 200.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
-	player.addComponent<ColliderComponent>(champ);
-	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay,ship.spriteCols, ship.spriteRows);
 	player.addComponent<KeyboardController>();
+	player.addComponent<ColliderComponent>(champ);
+	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay, ship.spriteCols, ship.spriteRows);
 	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
-	// manager.spawnEnemy(300, 10, 1, 1);
+	manager.spawnEnemies(50);
 }
 
 void Game::handleEvents()
@@ -96,24 +99,25 @@ void Game::update() const
 			if (coll1 != coll2 && coll1->is_colliding(*coll2)) {
 				entitiesHit.push_back(coll1);
 				entitiesHit.push_back(coll2);
-				// Make explosion or smth
+
+				if (coll1->tag == enemy) {
+					manager.enemyCount--;
+				}
+
 				coll1->entity->destroy();
 				coll2->entity->destroy();
 			}
 		}
 	}
-	Game::colliders.erase(std::remove_if(std::begin(Game::colliders), std::end(Game::colliders),
-		[](ColliderComponent* coll)
-		{
-			// If coll is in entitiesHit then delete it
-			if (std::find(entitiesHit.begin(), entitiesHit.end(), coll) != entitiesHit.end()) {
-				
-				return true;
-			}
-		}),
-		std::end(Game::colliders)
-	);
+
+	for (auto& e : entitiesHit) {
+		eraseCollider(e);
+	}
 	entitiesHit.clear();
+
+	if (manager.enemyCount <= 0) {
+		manager.spawnEnemies(50);
+	}
 	manager.refresh();
 	manager.update();
 }
@@ -134,3 +138,4 @@ void Game::clean() const
 	SDL_QUIT;
 	std::cout << "Game cleaned" << std::endl;
 }
+
