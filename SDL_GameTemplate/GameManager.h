@@ -2,6 +2,7 @@
 #include "ECS.h"
 #include "Components.h"
 #include "entityData.h"
+#include "Animation.h"
 
 class GameManager : public Manager {
 	std::vector<Entity*> entitiesToAdd;
@@ -9,7 +10,6 @@ class GameManager : public Manager {
 
 public:
 	int enemyCount = 0;
-
 	void spawnEnemy(float x, float y, int enemyIndex, int bulletIndex) {
 		entityData enemy = shipData[enemyIndex];
 		entityData bullet = bulletData[bulletIndex];
@@ -46,5 +46,11 @@ public:
 public:
 	void addEntityToQueue(Entity* e) {
 		entitiesToAdd.emplace_back(e);
+	}
+
+	void makeAnimation(int x, int y, int animationIndex=0) {
+		Entity* e = new Entity(*this);
+		addEntityToQueue(e);
+		e->addComponent<Animation>(x, y, explosionData[animationIndex]);
 	}
 };

@@ -104,6 +104,12 @@ void Game::update() const
 					manager.enemyCount--;
 				}
 
+				if (coll1->tag == champ) {
+					exit(0);
+				}
+				Vector2D pos = coll1->entity->getComponent<PositionComponent>().position;
+				manager.makeAnimation(pos.x, pos.y);
+
 				coll1->entity->destroy();
 				coll2->entity->destroy();
 			}
@@ -118,6 +124,7 @@ void Game::update() const
 	if (manager.enemyCount <= 0) {
 		manager.spawnEnemies(50);
 	}
+
 	manager.refresh();
 	manager.update();
 }

@@ -21,5 +21,13 @@ public:
 			velocity.x = -velocity.x;
 		}
 		posComp->position.x += velocity.x;
+		
+		if (posComp->position.y < 0) {
+			velocity.y = 1;
+		}
+		else if ( posComp->position.y > 100) {
+			velocity.y = -1;
+		}
+		posComp->position.y += velocity.y;
 	}
 };

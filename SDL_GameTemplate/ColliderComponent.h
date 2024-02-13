@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
+#include <algorithm>
 #include "SDL.h"
 #include "ECS.h"
-#include <algorithm>
 #include "Collision.h"
 #include "Components.h"
 
