@@ -131,3 +131,7 @@ public:
 
 	virtual void addEntityToQueue(Entity *) {};
 };
+
+template <typename T> bool isIn(std::vector<T> &v, T value) {
+	return std::find(v.begin(), v.end(), value) != v.end();
+}

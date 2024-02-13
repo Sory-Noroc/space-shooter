@@ -96,7 +96,7 @@ void Game::update() const
 {
 	for (auto& coll1 : colliders) {
 		for (auto& coll2 : colliders) {
-			if (coll1 != coll2 && coll1->is_colliding(*coll2)) {
+			if (coll1 != coll2 && coll1->is_colliding(*coll2) && !isIn(entitiesHit, coll1) && !isIn(entitiesHit, coll2)) {
 				entitiesHit.push_back(coll1);
 				entitiesHit.push_back(coll2);
 
