@@ -69,7 +69,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<ColliderComponent>(champ);
 	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay, ship.spriteCols, ship.spriteRows);
 	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
-	manager.spawnEnemies(50);
+	manager.spawnEnemies(50,1);
 }
 
 void Game::handleEvents()
@@ -94,6 +94,7 @@ void Game::handleEvents()
 
 void Game::update() const
 {
+	static int i = 1;
 	for (auto& coll1 : colliders) {
 		for (auto& coll2 : colliders) {
 			if (coll1 != coll2 && coll1->is_colliding(*coll2) && !isIn(entitiesHit, coll1) && !isIn(entitiesHit, coll2)) {
@@ -121,8 +122,18 @@ void Game::update() const
 	}
 	entitiesHit.clear();
 
-	if (manager.enemyCount <= 0) {
-		manager.spawnEnemies(50);
+	if (manager.enemyCount <= 0)
+	{
+		if (manager.enemyWave % 4 == 0)
+		{
+			++i;
+			manager.enemyCount = 0;
+			manager.enemyWave = 1;
+		}
+		if (i <= 3)
+		{
+			manager.spawnEnemies(50, i);
+		}
 	}
 
 	manager.refresh();

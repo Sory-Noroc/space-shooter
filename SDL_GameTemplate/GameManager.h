@@ -6,9 +6,9 @@
 
 class GameManager : public Manager {
 	std::vector<Entity*> entitiesToAdd;
-	int enemyWave = 1;
 
 public:
+	int enemyWave = 1;
 	int enemyCount = 0;
 	void spawnEnemy(float x, float y, int enemyIndex, int bulletIndex) {
 		entityData enemy = shipData[enemyIndex];
@@ -23,7 +23,7 @@ public:
 		e->addComponent<ColliderComponent>(tag::enemy);
 	}
 
-	void spawnEnemies(int y, int enemyIndex = 1, int bulletIndex = 1) {
+	void spawnEnemies(int y, int enemyIndex, int bulletIndex = 1) {
 		int x, enemyWidth = shipData[enemyIndex].w * shipData[enemyIndex].scale;
 		int distance = (SCREEN_WIDTH - enemyWave * enemyWidth) / (enemyWave + 1);
 		for (int i = 0; i < enemyWave; i++) {
@@ -43,7 +43,6 @@ public:
 		entitiesToAdd.clear();
 	}
 
-public:
 	void addEntityToQueue(Entity* e) {
 		entitiesToAdd.emplace_back(e);
 	}

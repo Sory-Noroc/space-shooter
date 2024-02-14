@@ -11,6 +11,7 @@ public:
 	int spriteDelay;
 };
 
-const entityData shipData[2] = { {"assets/ship.png", 16, 24, 5, 5, 2, 200}, {"assets/enemy-big.png", 32, 32, 3, 2, 1, 200} };
+const entityData shipData[4] = { {"assets/ship.png", 16, 24, 5, 5, 2, 200}, {"assets/enemy-small.png", 16, 16, 3, 2, 1, 200},
+	{"assets/enemy-medium.png", 32, 16, 3, 2, 1, 200}, {"assets/enemy-big.png", 32, 32, 3, 2, 1, 200} };
 const entityData bulletData[2] = { {"assets/laser-bolts.png", 5, 5, 4, 2, 1, 200}, {"assets/laser-bolts.png", 5, 5, 2, 2, 1, 200} };
 const entityData explosionData[1] = { {"assets/explosion.png", 16, 16, 3, 5, 1, 200 } };
