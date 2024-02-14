@@ -100,7 +100,7 @@ void Game::update() const
 				entitiesHit.push_back(coll1);
 				entitiesHit.push_back(coll2);
 
-				if (coll1->tag == enemy) {
+				if (coll1->tag == enemy || coll2->tag == enemy) {
 					manager.enemyCount--;
 				}
 
