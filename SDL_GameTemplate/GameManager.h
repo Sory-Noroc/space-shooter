@@ -10,12 +10,27 @@ class GameManager : public Manager {
 public:
 	int enemyWave = 1;
 	int enemyCount = 0;
+	int score = 0;
+
+	void createPlayer(Entity& player) {
+		int shipIndex = 0;
+		entityData ship = shipData[shipIndex];
+		entityData shipBullet = bulletData[shipIndex];
+		player.health = ship.health;
+		player.addComponent<PositionComponent>(200.0f, 200.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
+		player.addComponent<KeyboardController>();
+		player.addComponent<ColliderComponent>(champ);
+		player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay, ship.spriteCols, ship.spriteRows);
+		player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
+	}
+
 	void spawnEnemy(float x, float y, int enemyIndex, int bulletIndex) {
 		entityData enemy = shipData[enemyIndex];
 		entityData bullet = bulletData[bulletIndex];
 		Entity* e = new Entity(*this);
 		addEntityToQueue(e);
 
+		e->health = enemy.health;
 		e->addComponent<PositionComponent>(x, y, enemy.w, enemy.h).setScale(enemy.scale);
 		e->addComponent<SpriteComponent>(enemy.path, enemy.spriteDelay, enemy.spriteCols, enemy.spriteRows);
 		e->addComponent<BulletManagerComponent>(1000, bullet.scale, 1.f, 1).activate(); // Activate continuous shooting
@@ -32,6 +47,11 @@ public:
 		}
 		enemyCount += enemyWave;
 		enemyWave++;
+	}
+
+	void enemyHit(Entity* enemy) {
+		enemyCount--;
+		score += pow(enemy->health, 2);
 	}
 
 	void update() {

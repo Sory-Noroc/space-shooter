@@ -57,6 +57,7 @@ public:
 		entity->manager.addEntityToQueue(bullet);
 		entityData shot = bulletData[imageIndex];
 		setStartPosition(velocity.y);
+		bullet->health = shot.health;
 		bullet->addComponent<PositionComponent>(startPos.x, startPos.y, shot.w, shot.h, ignore)
 			.setSpeed(2)->setScale(scale)->setVelocity(velocity);
 		bullet->addComponent<SpriteComponent>(shot.path, shot.spriteDelay, shot.spriteCols, shot.spriteRows);

@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <iostream>
 #include <vector>
+#include <SDL_ttf.h>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
@@ -25,16 +26,7 @@ public:
 	static std::vector<ColliderComponent*> entitiesHit;
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
-
-	static void eraseCollider(ColliderComponent* c) {
-		colliders.erase(std::remove_if(std::begin(colliders), std::end(colliders),
-			[c](ColliderComponent* coll)
-			{
-				return coll == c;
-			}),
-			std::end(colliders)
-				);
-	}
+	static void eraseCollider(ColliderComponent* c);
 
 private:
 	bool isRunning;

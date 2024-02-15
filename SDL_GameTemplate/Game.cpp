@@ -57,18 +57,12 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
-	SDL_Color white = { 255, 255, 255, 255 };
-	//TTF_RenderText_Solid(TTF_OpenFont("assets/Terminal.ttf", 28), "Space Shooter", white);
+	if (TTF_Init() == -1) {
+		exit(-2004);
+	}
 
-	int shipIndex = 0;
 	background = new Background(renderer);
-	entityData ship = shipData[shipIndex];
-	entityData shipBullet = bulletData[shipIndex];
-	player.addComponent<PositionComponent>(200.0f, 200.0f, ship.w, ship.h, stop).setScale(ship.scale)->setSpeed(3);
-	player.addComponent<KeyboardController>();
-	player.addComponent<ColliderComponent>(champ);
-	player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay, ship.spriteCols, ship.spriteRows);
-	player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
+	manager.createPlayer(player);
 	manager.spawnEnemies(50,1);
 }
 
@@ -101,24 +95,30 @@ void Game::update() const
 				entitiesHit.push_back(coll1);
 				entitiesHit.push_back(coll2);
 
-				if (coll1->tag == enemy || coll2->tag == enemy) {
-					manager.enemyCount--;
+				if (coll1->tag == enemy) {
+					manager.enemyHit(coll1->entity);
+				}
+				else if (coll2->tag == enemy) {
+					manager.enemyHit(coll2->entity);
 				}
 
-				if (coll1->tag == champ) {
-					exit(0);
-				}
 				Vector2D pos = coll1->entity->getComponent<PositionComponent>().position;
 				manager.makeAnimation(pos.x, pos.y);
 
-				coll1->entity->destroy();
-				coll2->entity->destroy();
+				coll1->entity->wasHit();
+				coll2->entity->wasHit();
 			}
 		}
 	}
 
+	if (player.health <= 0) {
+		exit(0);
+	}
+
 	for (auto& e : entitiesHit) {
-		eraseCollider(e);
+		if (e->entity->health == 0) {
+			eraseCollider(e);
+		}
 	}
 	entitiesHit.clear();
 
@@ -138,6 +138,16 @@ void Game::update() const
 
 	manager.refresh();
 	manager.update();
+}
+
+void Game::eraseCollider(ColliderComponent* c) {
+	colliders.erase(std::remove_if(std::begin(colliders), std::end(colliders),
+		[c](ColliderComponent* coll)
+		{
+			return coll == c;
+		}),
+		std::end(colliders)
+			);
 }
 
 void Game::render() const

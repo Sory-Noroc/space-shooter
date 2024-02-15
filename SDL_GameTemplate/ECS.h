@@ -51,6 +51,7 @@ class Entity {
 public:
 	Manager& manager;
 	bool active = true;
+	int health = 1;
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
@@ -59,6 +60,7 @@ public:
 	Entity(Manager& mManager) : manager(mManager) {}
 
 	void update() {
+		if (health == 0) destroy();
 		for (auto& c : components) c->update();
 	}
 
@@ -69,6 +71,8 @@ public:
 	bool isActive() const { return active; }
 
  	void destroy() { active = false; }
+
+	void wasHit() { health--; }
 
 	template <typename T> bool hasComponent() const {
 		return componentBitSet[getComponentTypeID<T>()];
@@ -129,7 +133,7 @@ public:
 		entities.emplace_back(std::move(uPtr));
 	}
 
-	virtual void addEntityToQueue(Entity *) {};
+	virtual void addEntityToQueue(Entity *e) {};
 };
 
 template <typename T> bool isIn(std::vector<T> &v, T value) {
