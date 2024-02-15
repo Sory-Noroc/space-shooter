@@ -103,7 +103,7 @@ void Game::update() const
 				}
 
 				Vector2D pos = coll1->entity->getComponent<PositionComponent>().position;
-				manager.makeAnimation(pos.x, pos.y);
+				manager.makeAnimation((int)pos.x, (int)pos.y);
 
 				coll1->entity->wasHit();
 				coll2->entity->wasHit();

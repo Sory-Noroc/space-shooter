@@ -25,5 +25,5 @@ Background::~Background()
 
 void Background::DrawBackground()
 {
-	TextureManager::Draw(space, src, dest);
+	TextureManager::Draw(space, &src, &dest);
 }

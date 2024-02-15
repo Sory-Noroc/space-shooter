@@ -44,11 +44,11 @@ public:
 		
 		if (orientation == -1)
 		{
-			startPos.y = image.y - (bulletData[imageIndex].h * scale);
+			startPos.y = (float)(image.y - (bulletData[imageIndex].h * scale));
 		}
 		else 
 		{
-			startPos.y = image.y + image.h;
+			startPos.y = (float)(image.y + image.h);
 		}
 	}
 

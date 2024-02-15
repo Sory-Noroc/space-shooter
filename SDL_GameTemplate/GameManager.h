@@ -3,6 +3,7 @@
 #include "Components.h"
 #include "entityData.h"
 #include "Animation.h"
+#include "HealthbarComponent.h"
 
 class GameManager : public Manager {
 	std::vector<Entity*> entitiesToAdd;
@@ -22,9 +23,10 @@ public:
 		player.addComponent<ColliderComponent>(champ);
 		player.addComponent<SpriteComponent>(ship.path, ship.spriteDelay, ship.spriteCols, ship.spriteRows);
 		player.addComponent<BulletManagerComponent>(1000, shipBullet.scale, -1.f, 0);
+		player.addComponent<HealthbarComponent>();
 	}
 
-	void spawnEnemy(float x, float y, int enemyIndex, int bulletIndex) {
+	void spawnEnemy(int x, int y, int enemyIndex, int bulletIndex) {
 		entityData enemy = shipData[enemyIndex];
 		entityData bullet = bulletData[bulletIndex];
 		Entity* e = new Entity(*this);
@@ -51,7 +53,7 @@ public:
 
 	void enemyHit(Entity* enemy) {
 		enemyCount--;
-		score += pow(enemy->health, 2);
+		score += static_cast<int>(pow(enemy->health, 2));
 	}
 
 	void update() {

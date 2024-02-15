@@ -11,7 +11,7 @@ class Animation: public Component {
 	entityData sprite;
 
 public:
-	Animation(float x, float y, entityData sprite) {
+	Animation(int x, int y, entityData sprite) {
 		this->sprite = sprite;
 		this->delay = sprite.spriteDelay;
 		texture = TextureManager::LoadTexture(sprite.path);
@@ -26,8 +26,8 @@ public:
 
 public: 
 	void draw() {
-		current = SDL_GetTicks();
-		TextureManager::Draw(texture, srcRect, destRect);
+		current = static_cast<float>(SDL_GetTicks());
+		TextureManager::Draw(texture, &srcRect, &destRect);
 		if (current - prev >= delay) {
 			srcRect.x = n * srcRect.w;
 			srcRect.y = m * srcRect.h;
@@ -50,22 +50,6 @@ public:
 			}
 			prev = current;
 		}
-		/*int sprite_tick = static_cast<int>(current) % (sprite.spriteRows * sprite.spriteCols);
-		if (sprite_tick >= sprite.spriteCols) {
-			srcRect.y = srcRect.h;
-		}
-		else {
-			srcRect.y = 0;
-		}
-		srcRect.x = srcRect.w * (sprite_tick % sprite.spriteCols);
-
-		for (int i = 0; i < sprite.spriteRows; i++) {
-			srcRect.y = i * sprite.h;
-			for (int j = 0; j < sprite.spriteCols; j++) {
-				current = prev;
-				srcRect.x = j * sprite.w;
-			}
-		}*/
 	}
 
 	~Animation() {

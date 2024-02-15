@@ -15,8 +15,8 @@ SDL_Texture* TextureManager::LoadTexture(SDL_Surface* surface) {
 	return tex;
 }
 
-void TextureManager::Draw(SDL_Texture * tex, SDL_Rect src, SDL_Rect dest)
+void TextureManager::Draw(SDL_Texture * tex, SDL_Rect *src, SDL_Rect *dest)
 {
    // sent with nullptr
-	SDL_RenderCopy(Game::renderer, tex, &src, &dest);
+	SDL_RenderCopy(Game::renderer, tex, src, dest);
 }
