@@ -13,7 +13,7 @@ public:
 	int enemyCount = 0;
 	int score = 0;
 
-	void createPlayer(Entity& player) {
+	void initPlayer(Entity& player) {
 		int shipIndex = 0;
 		entityData ship = shipData[shipIndex];
 		entityData shipBullet = bulletData[shipIndex];
@@ -38,6 +38,7 @@ public:
 		e->addComponent<BulletManagerComponent>(1000, bullet.scale, 1.f, 1).activate(); // Activate continuous shooting
 		e->addComponent<MovementComponent>();
 		e->addComponent<ColliderComponent>(tag::enemy);
+		e->addComponent<HealthbarComponent>();
 	}
 
 	void spawnEnemies(int y, int enemyIndex, int bulletIndex = 1) {
@@ -52,8 +53,10 @@ public:
 	}
 
 	void enemyHit(Entity* enemy) {
-		enemyCount--;
-		score += static_cast<int>(pow(enemy->health, 2));
+		if (enemy->health == 0) {
+			enemyCount--;
+			score += static_cast<int>(pow(enemy->health, 2));
+		}
 	}
 
 	void update() {

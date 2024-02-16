@@ -62,7 +62,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
-	manager.createPlayer(player);
+	manager.initPlayer(player);
 	manager.spawnEnemies(50,1);
 }
 
@@ -95,6 +95,9 @@ void Game::update() const
 				entitiesHit.push_back(coll1);
 				entitiesHit.push_back(coll2);
 
+				coll1->entity->wasHit();
+				coll2->entity->wasHit();
+
 				if (coll1->tag == enemy) {
 					manager.enemyHit(coll1->entity);
 				}
@@ -104,9 +107,6 @@ void Game::update() const
 
 				Vector2D pos = coll1->entity->getComponent<PositionComponent>().position;
 				manager.makeAnimation((int)pos.x, (int)pos.y);
-
-				coll1->entity->wasHit();
-				coll2->entity->wasHit();
 			}
 		}
 	}

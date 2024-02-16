@@ -24,9 +24,12 @@ public:
 		}
 		w = pos->width * pos->scale;
 
-		healthS = SDL_CreateRGBSurface(0, w, h, 32, 152, 5, 5, 255);
+		healthS = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
 		if (healthS == nullptr) {
 			printf("Error creating surface with code %s\n", SDL_GetError());
+		}
+		else {
+			SDL_FillRect(healthS, &srcHealth, SDL_MapRGB(healthS->format, red.r, red.g, red.b));
 		}
 
 		otherS = SDL_CreateRGBSurface(0, w, h, 32, 90, 80, 60, 200);
@@ -41,30 +44,35 @@ public:
 		srcHealth.y = 0;
 		srcOther.x = 0;
 		srcOther.x = 0;
+		updateRects(w);
 	}
 
 	void update() override {
-		int healthWidth = health * w / maxHealth;
+		int healthWidth = entity->health * w / maxHealth;
 		healthR.x = static_cast<int>(pos->position.x);
-		healthR.y = static_cast<int>(pos->position.y + h);
+		healthR.y = static_cast<int>(pos->position.y + pos->height * pos->scale + h);
 		otherR.x = static_cast<int>(pos->position.x) + healthWidth;
-		otherR.y = static_cast<int>(pos->position.y + h);
+		otherR.y = static_cast<int>(pos->position.y + pos->height * pos->scale + h);
 
 		if (health != entity->health) {
 			// Only update the healthbar if the health changed
-			int otherWidth = w - healthWidth;
-			health = entity->health;
-
-			srcHealth.w = healthWidth;
-			srcHealth.h = h;
-			srcOther.w = otherWidth;
-			srcOther.h = h;
-
-			healthR.w = healthWidth;
-			healthR.h = h;
-			otherR.w = otherWidth;
-			otherR.h = h;
+			updateRects(healthWidth);
 		}
+	}
+
+	void updateRects(int healthWidth) {
+		int otherWidth = w - healthWidth;
+		health = entity->health;
+
+		srcHealth.w = healthWidth;
+		srcHealth.h = h;
+		srcOther.w = otherWidth;
+		srcOther.h = h;
+
+		healthR.w = healthWidth;
+		healthR.h = h;
+		otherR.w = otherWidth;
+		otherR.h = h;
 	}
 
 	void draw() override {
