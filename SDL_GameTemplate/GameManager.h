@@ -33,6 +33,7 @@ public:
 		addEntityToQueue(e);
 
 		e->health = enemy.health;
+		e->maxHealth = e->health;
 		e->addComponent<PositionComponent>(x, y, enemy.w, enemy.h).setScale(enemy.scale);
 		e->addComponent<SpriteComponent>(enemy.path, enemy.spriteDelay, enemy.spriteCols, enemy.spriteRows);
 		e->addComponent<BulletManagerComponent>(1000, bullet.scale, 1.f, 1).activate(); // Activate continuous shooting
@@ -55,7 +56,7 @@ public:
 	void enemyHit(Entity* enemy) {
 		if (enemy->health == 0) {
 			enemyCount--;
-			score += static_cast<int>(pow(enemy->health, 2));
+			score += static_cast<int>(pow(enemy->maxHealth, 2));
 		}
 	}
 

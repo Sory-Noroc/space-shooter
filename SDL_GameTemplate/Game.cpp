@@ -8,7 +8,9 @@
 #include "GameManager.h"
 #include "entityData.h"
 #include "ECS.h"
+#include "Text.h"
 
+char* scoreString = (char*)"Score: ";
 GameManager manager;
 Background* background;
 SDL_Renderer* Game::renderer = nullptr;
@@ -62,6 +64,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
+	scoreText = new Text(scoreString, SCREEN_HEIGHT);
 	manager.initPlayer(player);
 	manager.spawnEnemies(50,1);
 }
@@ -84,6 +87,7 @@ void Game::handleEvents()
 	default:
 		break;
 	}
+	scoreText->update(manager.score);
 }
 
 void Game::update() const
@@ -155,6 +159,7 @@ void Game::render() const
 	SDL_RenderClear(renderer);
 	// this is where we would add stuff to render
 	background->DrawBackground();
+	scoreText->render();
 	manager.draw();
 	SDL_RenderPresent(renderer);
 }

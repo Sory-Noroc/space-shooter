@@ -32,7 +32,7 @@ public:
 			SDL_FillRect(healthS, &srcHealth, SDL_MapRGB(healthS->format, red.r, red.g, red.b));
 		}
 
-		otherS = SDL_CreateRGBSurface(0, w, h, 32, 90, 80, 60, 200);
+		//otherS = SDL_CreateRGBSurface(0, w, h, 32, 0,0,0,0);
 		if (otherS == nullptr) {
 			printf("Error creating surface with code %s\n", SDL_GetError());
 		}

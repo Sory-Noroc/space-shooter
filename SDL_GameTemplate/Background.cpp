@@ -1,6 +1,5 @@
 #include "Background.h"
 #include "TextureManager.h"
-#include "Game.h"
 #include "SDL.h"
 
 Background::Background(SDL_Renderer* renderer)

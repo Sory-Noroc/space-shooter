@@ -52,6 +52,7 @@ public:
 	Manager& manager;
 	bool active = true;
 	int health = 1;
+	int maxHealth;
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
@@ -72,7 +73,9 @@ public:
 
  	void destroy() { active = false; }
 
-	void wasHit() { health--; }
+	void wasHit() { 
+		health--; 
+	}
 
 	template <typename T> bool hasComponent() const {
 		return componentBitSet[getComponentTypeID<T>()];
