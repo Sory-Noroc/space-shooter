@@ -4,6 +4,7 @@
 #include "entityData.h"
 #include "Animation.h"
 #include "HealthbarComponent.h"
+#include "KeyboardController.h"
 
 class GameManager : public Manager {
 	std::vector<Entity*> entitiesToAdd;
@@ -13,8 +14,8 @@ public:
 	int enemyCount = 0;
 	int score = 0;
 
-	void initPlayer(Entity& player) {
-		int shipIndex = 0;
+	static void initPlayer(Entity& player) {
+		constexpr int shipIndex = 0;
 		entityData ship = shipData[shipIndex];
 		entityData shipBullet = bulletData[shipIndex];
 		player.health = ship.health;
@@ -42,9 +43,10 @@ public:
 		e->addComponent<HealthbarComponent>();
 	}
 
-	void spawnEnemies(int y, int enemyIndex, int bulletIndex = 1) {
-		int x, enemyWidth = shipData[enemyIndex].w * shipData[enemyIndex].scale;
-		int distance = (SCREEN_WIDTH - enemyWave * enemyWidth) / (enemyWave + 1);
+	void spawnEnemies(const int y, const int enemyIndex, const int bulletIndex = 1) {
+		int x;
+		const int enemyWidth = shipData[enemyIndex].w * shipData[enemyIndex].scale;
+		const int distance = (SCREEN_WIDTH - enemyWave * enemyWidth) / (enemyWave + 1);
 		for (int i = 0; i < enemyWave; i++) {
 			x = distance * (i + 1) + enemyWidth * i;
 			spawnEnemy(x, y, enemyIndex, bulletIndex);
@@ -53,29 +55,59 @@ public:
 		enemyWave++;
 	}
 
-	void enemyHit(Entity* enemy) {
+	void enemyHit(const Entity* enemy) {
 		if (enemy->health == 0) {
 			enemyCount--;
 			score += static_cast<int>(pow(enemy->maxHealth, 2));
 		}
 	}
 
-	void update() {
+	void update() override
+	{
 		Manager::update();
 		// Add entities
-		for (auto& e : entitiesToAdd) {
+		for (const auto e : entitiesToAdd)
+		{
 			addEntity(e);
 		}
 		entitiesToAdd.clear();
 	}
 
-	void addEntityToQueue(Entity* e) {
+	void addEntityToQueue(Entity* e) override {
 		entitiesToAdd.emplace_back(e);
 	}
 
-	void makeAnimation(int x, int y, int animationIndex=0) {
-		Entity* e = new Entity(*this);
+	void manageAnimation(const ColliderComponent* coll1, const ColliderComponent* coll2) {
+
+		if (coll1->tag == champBullet || coll1->tag == enemyBullet)
+		{
+			const Vector2D pos = coll2->entity->getComponent<PositionComponent>().position;
+			makeAnimation(static_cast<int>(pos.x), static_cast<int>(pos.y), coll2->entity);
+		}
+		else {
+			const auto pos = coll1->entity->getComponent<PositionComponent>().position;
+			makeAnimation(static_cast<int>(pos.x), static_cast<int>(pos.y), coll1->entity);
+		}
+	}
+
+	void makeAnimation(int x, int y, const Entity* entityHit, const int animationIndex=0) {
+		/*
+		Docs description
+		*/
+		auto* e = new Entity(*this);
+		int w, h;
+		PositionComponent pos = entityHit->getComponent<PositionComponent>();
+		w = pos.width * pos.scale;
+		h = pos.height * pos.scale;
+		
+		// Getting the max value to make a square explosion not a distorted one
+		if (w > h) {
+			h = w;
+		}
+		else {
+			w = h;
+		}
 		addEntityToQueue(e);
-		e->addComponent<Animation>(x, y, explosionData[animationIndex]);
+		e->addComponent<Animation>(x, y, w, h, explosionData[animationIndex]);
 	}
 };

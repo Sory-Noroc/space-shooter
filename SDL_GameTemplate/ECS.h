@@ -104,13 +104,14 @@ public:
 class Manager {
 public:
 	std::vector<std::unique_ptr<Entity>> entities;
-	void update() {
-		for (auto& e : entities) {
+
+	virtual void update() {
+		for (const auto& e : entities) {
 			e->update();
 		}
 	}
 
-	void draw() {
+	void draw() const {
 		for (auto& e : entities) {
 			e->draw();
 		}
@@ -136,7 +137,9 @@ public:
 		entities.emplace_back(std::move(uPtr));
 	}
 
-	virtual void addEntityToQueue(Entity *e) {};
+	virtual void addEntityToQueue(Entity *e) = 0;
+
+	virtual ~Manager() = default;
 };
 
 template <typename T> bool isIn(std::vector<T> &v, T value) {

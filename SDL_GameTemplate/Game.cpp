@@ -1,16 +1,10 @@
 #include "Game.h"
 #include "Background.h"
-#include "TextureManager.h"
 #include "Components.h"
-#include "Collision.h"
-#include "KeyboardController.h"
-#include "BulletManagerComponent.h"
 #include "GameManager.h"
-#include "entityData.h"
 #include "ECS.h"
-#include "Text.h"
 
-char* scoreString = (char*)"Score: ";
+char* scoreString = const_cast<char*>("Score: ");
 GameManager manager;
 Background* background;
 SDL_Renderer* Game::renderer = nullptr;
@@ -23,12 +17,10 @@ auto& player(manager.addEntity());
 
 Game::Game() : isRunning(false), window(nullptr)
 {
+	scoreText = nullptr;
 }
 
-Game::~Game()
-{
-	//delete spaceship;
-}
+Game::~Game() = default;
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -64,7 +56,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	background = new Background(renderer);
-	scoreText = new Text(scoreString, SCREEN_HEIGHT);
+	scoreText = new ScoreText(scoreString, SCREEN_HEIGHT);
 	manager.initPlayer(player);
 	manager.spawnEnemies(50,1);
 }
@@ -90,7 +82,7 @@ void Game::handleEvents()
 	scoreText->update(manager.score);
 }
 
-void Game::update() const
+void Game::update()
 {
 	static int i = 1;
 	for (auto& coll1 : colliders) {
@@ -109,17 +101,16 @@ void Game::update() const
 					manager.enemyHit(coll2->entity);
 				}
 
-				Vector2D pos = coll1->entity->getComponent<PositionComponent>().position;
-				manager.makeAnimation((int)pos.x, (int)pos.y);
+				manager.manageAnimation(coll1, coll2);
 			}
 		}
 	}
 
 	if (player.health <= 0) {
-		exit(0);
+		finish();
 	}
 
-	for (auto& e : entitiesHit) {
+	for (const auto e : entitiesHit) {
 		if (e->entity->health == 0) {
 			eraseCollider(e);
 		}
@@ -137,6 +128,9 @@ void Game::update() const
 		if (i <= 3)
 		{
 			manager.spawnEnemies(50, i);
+		} else
+		{
+			i = 1;
 		}
 	}
 
@@ -146,7 +140,7 @@ void Game::update() const
 
 void Game::eraseCollider(ColliderComponent* c) {
 	colliders.erase(std::remove_if(std::begin(colliders), std::end(colliders),
-		[c](ColliderComponent* coll)
+		[c](const ColliderComponent* coll)
 		{
 			return coll == c;
 		}),
@@ -159,7 +153,7 @@ void Game::render() const
 	SDL_RenderClear(renderer);
 	// this is where we would add stuff to render
 	background->DrawBackground();
-	scoreText->render();
+	scoreText->draw();
 	manager.draw();
 	SDL_RenderPresent(renderer);
 }
@@ -169,6 +163,6 @@ void Game::clean() const
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_QUIT;
-	std::cout << "Game cleaned" << std::endl;
+	std::cout << "Game cleaned\n";
 }
 

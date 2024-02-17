@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <SDL_ttf.h>
-#include "Text.h"
+#include "ScoreText.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
@@ -19,10 +19,11 @@ public:
 	void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
 	void handleEvents();
-	void update() const;
+	void update();
 	void render() const;
 	void clean() const;
 	bool running() const { return isRunning; }
+	void finish() { isRunning = false; }
 	static std::vector<ColliderComponent*> colliders;
 	static std::vector<ColliderComponent*> entitiesHit;
 	static SDL_Renderer* renderer;
@@ -32,5 +33,5 @@ public:
 private:
 	bool isRunning;
 	SDL_Window* window;
-	Text* scoreText;
+	ScoreText* scoreText;
 };

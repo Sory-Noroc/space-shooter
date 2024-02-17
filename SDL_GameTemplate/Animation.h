@@ -11,7 +11,7 @@ class Animation: public Component {
 	entityData sprite;
 
 public:
-	Animation(int x, int y, entityData sprite) {
+	Animation(int x, int y, int w, int h, entityData sprite) {
 		this->sprite = sprite;
 		this->delay = sprite.spriteDelay;
 		texture = TextureManager::LoadTexture(sprite.path);
@@ -20,8 +20,8 @@ public:
 		srcRect.h = sprite.h;
 		destRect.x = x;
 		destRect.y = y;
-		destRect.w = srcRect.w * sprite.scale;
-		destRect.h = srcRect.h * sprite.scale;
+		destRect.w = w;
+		destRect.h = h;
 	}
 
 public: 

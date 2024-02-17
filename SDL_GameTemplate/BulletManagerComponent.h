@@ -7,7 +7,6 @@
 class Game;
 
 class BulletManagerComponent : public Component {
-	int bulletCount = 0;
 	bool active = false;
 	Vector2D velocity, startPos;
 	SpriteComponent* shooterSprite = nullptr;
