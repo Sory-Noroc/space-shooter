@@ -3,13 +3,13 @@
 #include "Components.h"
 #include "TextureManager.h"
 
-const SDL_Color gray = { 90, 80, 60, 200 };
-const SDL_Color red = { 152, 5, 5, 255 };
-const int h = 10;  // Height of the healthbar
+constexpr SDL_Color gray = { 90, 80, 60, 200 };
+constexpr SDL_Color red = { 152, 5, 5, 255 };
+constexpr int h = 10;  // Height of the healthbar
 
 class HealthbarComponent : public Component {
-	int health, maxHealth;
-	int w;
+	int health = 0, maxHealth = 0;
+	int w = 0;
 	PositionComponent* pos = nullptr;
 	SDL_Rect healthR, otherR, srcHealth, srcOther;
 	SDL_Texture* healthT = nullptr, *otherT = nullptr;
@@ -29,12 +29,15 @@ public:
 			printf("Error creating surface with code %s\n", SDL_GetError());
 		}
 		else {
-			SDL_FillRect(healthS, &srcHealth, SDL_MapRGB(healthS->format, red.r, red.g, red.b));
+			SDL_FillRect(healthS, nullptr, SDL_MapRGB(healthS->format, red.r, red.g, red.b));
 		}
 
-		//otherS = SDL_CreateRGBSurface(0, w, h, 32, 0,0,0,0);
+		otherS = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
 		if (otherS == nullptr) {
 			printf("Error creating surface with code %s\n", SDL_GetError());
+		}
+		else {
+			SDL_FillRect(otherS, nullptr, SDL_MapRGBA(otherS->format, gray.r, gray.g, gray.b, gray.a));
 		}
 
 		healthT = TextureManager::LoadTexture(healthS);
@@ -48,20 +51,20 @@ public:
 	}
 
 	void update() override {
-		int healthWidth = entity->health * w / maxHealth;
+		const int healthWidth = entity->health * w / maxHealth;
 		healthR.x = static_cast<int>(pos->position.x);
 		healthR.y = static_cast<int>(pos->position.y + pos->height * pos->scale + h);
 		otherR.x = static_cast<int>(pos->position.x) + healthWidth;
 		otherR.y = static_cast<int>(pos->position.y + pos->height * pos->scale + h);
 
 		if (health != entity->health) {
-			// Only update the healthbar if the health changed
+			// Only update the health bar if the health changed
 			updateRects(healthWidth);
 		}
 	}
 
-	void updateRects(int healthWidth) {
-		int otherWidth = w - healthWidth;
+	void updateRects(const int healthWidth) {
+		const int otherWidth = w - healthWidth;
 		health = entity->health;
 
 		srcHealth.w = healthWidth;
@@ -80,7 +83,7 @@ public:
 		TextureManager::Draw(otherT, &srcOther, &otherR);
 	}
 
-	~HealthbarComponent() {
+	~HealthbarComponent() override {
 		SDL_FreeSurface(healthS);
 		SDL_FreeSurface(otherS);
 		SDL_DestroyTexture(healthT);
