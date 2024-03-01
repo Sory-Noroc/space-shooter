@@ -5,4 +5,5 @@
 HighScore: 350
 
 ### Screenshots
-![](/Screenshots/Screenshot 2024-02-17 234250.png?raw=true "Space Shooter")
+![Space Shooter](/Screenshots/Screenshot\ 2024-02-17\ 234250.png?raw=true "Space Shooter")
+![Screenshot 2024-02-17 234250](https://github.com/Sory-Noroc/space-shooter/assets/61633959/790a9873-6d4b-4f9b-a38d-93518180eeff)
